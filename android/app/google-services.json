@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121425083955",
+    "firebase_url": "https://phr-chat-skripsi.firebaseio.com",
+    "project_id": "phr-chat-skripsi",
+    "storage_bucket": "phr-chat-skripsi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121425083955:android:552ab07354c0287983ad46",
+        "android_client_info": {
+          "package_name": "com.example.phr_skripsi_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121425083955-eioqqnfcjednumij11gtv3ig69un5j1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-aEIPuSQXkmjmiIzXl5whelVSEP5OQTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121425083955-eioqqnfcjednumij11gtv3ig69un5j1e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
