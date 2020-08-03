@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phr_skripsi_chat/provider/providers.dart';
 import 'package:phr_skripsi_chat/services/services.dart';
 import 'package:provider/provider.dart';
 
@@ -27,9 +28,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => ThemeBloc())
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, themeState) => MaterialApp(
-            theme: themeState.themeData,
-            home: Wrapper(),
+          builder: (context, themeState) =>
+              ChangeNotifierProvider<ImageUploadProvider>(
+            create: (context) => ImageUploadProvider(),
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: themeState.themeData,
+              home: Wrapper(),
+            ),
           ),
         ),
       ),

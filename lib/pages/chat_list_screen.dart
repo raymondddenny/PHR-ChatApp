@@ -50,11 +50,7 @@ class ChatListScreenContainer extends StatelessWidget {
           itemBuilder: (_, index) {
             return CustomChatTile(
               mini: false,
-              onTap: () {
-                // ChatScreen();
-                // TODO : struktur database untuk dokter, apakah di user atau di buat collection baru,
-                // TODO : connect data user dan data dokter yang pernah di chat bagaimana ?
-              },
+              onTap: () {},
               leading: Container(
                 constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
                 child: Stack(

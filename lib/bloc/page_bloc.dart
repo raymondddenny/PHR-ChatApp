@@ -11,10 +11,6 @@ class PageBloc extends Bloc<PageEvent, PageState> {
   // intial bloc v6
   PageBloc() : super(OnInitialPage());
 
-  //// ==== OLD Version ====
-  //// @override
-  //// PageState get initialState => OnInitialPage();
-
   @override
   Stream<PageState> mapEventToState(
     PageEvent event,
@@ -26,7 +22,11 @@ class PageBloc extends Bloc<PageEvent, PageState> {
     } else if (event is GoToMainPage) {
       yield OnMainPage();
     } else if (event is GoToRegistrationPage) {
-      yield OnRegistrationPage(event.registrationUserData);
+      yield OnRegistrationPage();
+    } else if (event is GoToRegistrationUserPage) {
+      yield OnRegistrationUserPage(event.registrationUserData);
+    } else if (event is GoToRegistrationDoctorPage) {
+      yield OnRegistrationDoctorPage(event.registrationUserData);
     } else if (event is GoToConfirmationPage) {
       yield OnAccountConfirmationPage(event.registrationUserData);
     } else if (event is GoToUserProfilePage) {
@@ -35,6 +35,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnEditProfilePage(event.user);
     } else if (event is GoToDoctorSelectedPage) {
       yield OnDoctorSelectedPage(event.doctorType);
+    } else if (event is GoToChatScreenPage) {
+      yield OnChatScreenPage(event.receiver, event.sender);
     }
   }
 }

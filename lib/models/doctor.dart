@@ -34,11 +34,6 @@ class Doctor extends Equatable {
       );
 
   @override
-  String toString() {
-    return "[$id] - $doctorName, $email";
-  }
-
-  @override
   List<Object> get props => [
         id,
         email,

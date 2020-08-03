@@ -5,18 +5,22 @@ class AuthServices {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
   // method signUp user
-  static Future<SignInSignUpResult> signUp(
-      {String fullName,
-      String job,
-      String emailAdress,
-      String password}) async {
+  static Future<SignInSignUpResult> signUp({
+    String fullName,
+    String job,
+    String emailAdress,
+    String password,
+    String noSIP,
+    String status,
+  }) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
         email: emailAdress,
         password: password,
       );
 
-      User user = result.user.convertToUser(fullName: fullName, job: job);
+      User user = result.user.convertToUser(
+          fullName: fullName, job: job, noSIP: noSIP, status: status);
 
       // to store data to Firebase
       await UserServices.updateUser(user);
@@ -26,27 +30,27 @@ class AuthServices {
     }
   }
 
-  // method signUp Doctor
-  static Future<SignInSignUpResultDoctor> signUpDoctor(
-      String fullName,
-      String emailAdress,
-      String password,
-      String noSip,
-      String speciality) async {
-    try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: emailAdress, password: password);
-      Doctor doctor = result.user.convertToDoctor(
-          doctorName: fullName, noSip: noSip, speciality: speciality);
+  // // method signUp Doctor
+  // static Future<SignInSignUpResultDoctor> signUpDoctor(
+  //     String fullName,
+  //     String emailAdress,
+  //     String password,
+  //     String noSip,
+  //     String speciality) async {
+  //   try {
+  //     AuthResult result = await _auth.createUserWithEmailAndPassword(
+  //         email: emailAdress, password: password);
+  //     Doctor doctor = result.user.convertToDoctor(
+  //         doctorName: fullName, noSip: noSip, speciality: speciality);
 
-      // store data to firebase
-      await UserServices.createAndUpdateDoctor(doctor);
-      return SignInSignUpResultDoctor(doctor: doctor);
-    } catch (e) {
-      return SignInSignUpResultDoctor(
-          message: e.toString().split(',')[1].trim());
-    }
-  }
+  //     // store data to firebase
+  //     await UserServices.createAndUpdateDoctor(doctor);
+  //     return SignInSignUpResultDoctor(doctor: doctor);
+  //   } catch (e) {
+  //     return SignInSignUpResultDoctor(
+  //         message: e.toString().split(',')[1].trim());
+  //   }
+  // }
 
   // sign in services
   static Future<SignInSignUpResult> signIn(
@@ -62,22 +66,22 @@ class AuthServices {
     }
   }
 
-  static Future<SignInSignUpResultDoctor> signInDoctor(
-    String email,
-    String password,
-  ) async {
-    try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+  // // static Future<SignInSignUpResultDoctor> signInDoctor(
+  // //   String email,
+  // //   String password,
+  // // ) async {
+  // //   try {
+  // //     AuthResult result = await _auth.signInWithEmailAndPassword(
+  // //         email: email, password: password);
 
-      // if success, create doctors user
-      Doctor doctor = await result.user.fromDoctorFireStore();
-      return SignInSignUpResultDoctor(doctor: doctor);
-    } catch (e) {
-      return SignInSignUpResultDoctor(
-          message: e.toString().split(',')[1].trim());
-    }
-  }
+  // //     // if success, create doctors user
+  // //     Doctor doctor = await result.user.fromDoctorFireStore();
+  // //     return SignInSignUpResultDoctor(doctor: doctor);
+  // //   } catch (e) {
+  // //     return SignInSignUpResultDoctor(
+  // //         message: e.toString().split(',')[1].trim());
+  // //   }
+  // }
 
   // sign out services
   static Future<void> signOut() async {
@@ -101,10 +105,10 @@ class SignInSignUpResult {
   SignInSignUpResult({this.user, this.message});
 }
 
-class SignInSignUpResultDoctor {
-  // this method is for check if there are errors happen when user sign in or sign up
-  final Doctor doctor;
-  final String message;
+// class SignInSignUpResultDoctor {
+//   // this method is for check if there are errors happen when user sign in or sign up
+//   final Doctor doctor;
+//   final String message;
 
-  SignInSignUpResultDoctor({this.doctor, this.message});
-}
+//   SignInSignUpResultDoctor({this.doctor, this.message});
+// }

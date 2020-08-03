@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () {
                           context.bloc<PageBloc>().add(
-                              GoToRegistrationPage(RegistrationUserData()));
+                              GoToRegistrationUserPage(RegistrationUserData()));
                         },
                         child: Text(
                           "Sign up",

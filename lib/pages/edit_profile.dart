@@ -139,6 +139,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                     SizedBox(height: 30),
+                    AbsorbPointer(
+                      child: TextField(
+                        controller: TextEditingController(text: widget.user.id),
+                        style: blackTextFont.copyWith(color: accentColor3),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            labelText: "User ID"),
+                      ),
+                    ),
+                    SizedBox(height: 30),
                     TextField(
                       controller: nameController,
                       onChanged: (text) {

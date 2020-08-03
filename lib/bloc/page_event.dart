@@ -20,8 +20,20 @@ class GoToMainPage extends PageEvent {
 }
 
 class GoToRegistrationPage extends PageEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class GoToRegistrationUserPage extends PageEvent {
   final RegistrationUserData registrationUserData;
-  GoToRegistrationPage(this.registrationUserData);
+  GoToRegistrationUserPage(this.registrationUserData);
+  @override
+  List<Object> get props => [];
+}
+
+class GoToRegistrationDoctorPage extends PageEvent {
+  final RegistrationUserData registrationUserData;
+  GoToRegistrationDoctorPage(this.registrationUserData);
   @override
   List<Object> get props => [];
 }
@@ -51,5 +63,13 @@ class GoToDoctorSelectedPage extends PageEvent {
   final DoctorType doctorType;
   GoToDoctorSelectedPage(this.doctorType);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [doctorType];
+}
+
+class GoToChatScreenPage extends PageEvent {
+  final User receiver;
+  final User sender;
+  GoToChatScreenPage({this.receiver, this.sender});
+  @override
+  List<Object> get props => [receiver];
 }

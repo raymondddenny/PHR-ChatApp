@@ -10,10 +10,10 @@ class DoctorPage extends StatefulWidget {
 
 class _DoctorPageState extends State<DoctorPage> {
   List<String> doctor = [
-    "dokter umum",
-    "dokter mata",
-    "dokter anak",
-    "dokter tht"
+    "Dokter Umum",
+    "Dokter Mata",
+    "Dokter Anak",
+    "Dokter THT"
   ];
 
   @override

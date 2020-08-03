@@ -25,8 +25,21 @@ class OnMainPage extends PageState {
 }
 
 class OnRegistrationPage extends PageState {
+  @override
+  List<Object> get props => [];
+}
+
+class OnRegistrationUserPage extends PageState {
   final RegistrationUserData registrationUserData;
-  OnRegistrationPage(this.registrationUserData);
+  OnRegistrationUserPage(this.registrationUserData);
+
+  @override
+  List<Object> get props => [];
+}
+
+class OnRegistrationDoctorPage extends PageState {
+  final RegistrationUserData registrationUserData;
+  OnRegistrationDoctorPage(this.registrationUserData);
 
   @override
   List<Object> get props => [];
@@ -57,5 +70,14 @@ class OnDoctorSelectedPage extends PageState {
   final DoctorType doctorType;
   OnDoctorSelectedPage(this.doctorType);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [doctorType];
+}
+
+class OnChatScreenPage extends PageState {
+  final User receiver;
+  final User sender;
+  OnChatScreenPage(this.receiver, this.sender);
+
+  @override
+  List<Object> get props => [receiver];
 }

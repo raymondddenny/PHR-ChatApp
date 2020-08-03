@@ -38,7 +38,7 @@ class CustomChatTile extends StatelessWidget {
             Expanded(
                 child: Container(
               margin: EdgeInsets.only(left: mini ? 10 : 15),
-              padding: EdgeInsets.symmetric(vertical: mini ? 3 : 20),
+              padding: EdgeInsets.symmetric(vertical: mini ? 3 : 5),
               decoration: BoxDecoration(
                   border: Border(
                       bottom: BorderSide(

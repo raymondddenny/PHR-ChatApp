@@ -59,9 +59,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       color: mainColor,
                       title: 'Get Started',
                       onPressed: () {
-                        context
-                            .bloc<PageBloc>()
-                            .add(GoToRegistrationPage(RegistrationUserData()));
+                        context.bloc<PageBloc>().add(GoToRegistrationPage());
+                        // context.bloc<PageBloc>().add(
+                        //     GoToRegistrationUserPage(RegistrationUserData()));
                       },
                     ),
                     RoundedButton(

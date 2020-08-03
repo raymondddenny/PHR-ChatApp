@@ -30,16 +30,27 @@ class Wrapper extends StatelessWidget {
           : (state is OnLoginPage)
               ? LoginPage()
               : (state is OnRegistrationPage)
-                  ? RegistrationPage(state.registrationUserData)
-                  : (state is OnAccountConfirmationPage)
-                      ? AccountConfirmationPage(state.registrationUserData)
-                      : (state is OnUserProfilePage)
-                          ? UserProfilePage()
-                          : (state is OnEditProfilePage)
-                              ? EditProfilePage(state.user)
-                              : (state is OnDoctorSelectedPage)
-                                  ? DoctorSelectedPageList(state.doctorType)
-                                  : MainPage(),
+                  ? RegistrationPage()
+                  : (state is OnRegistrationUserPage)
+                      ? UserRegistrationPage(state.registrationUserData)
+                      : (state is OnRegistrationDoctorPage)
+                          ? DoctorRegistrationPage(state.registrationUserData)
+                          : (state is OnAccountConfirmationPage)
+                              ? AccountConfirmationPage(
+                                  state.registrationUserData)
+                              : (state is OnUserProfilePage)
+                                  ? UserProfilePage()
+                                  : (state is OnEditProfilePage)
+                                      ? EditProfilePage(state.user)
+                                      : (state is OnDoctorSelectedPage)
+                                          ? DoctorSelectedPageList(
+                                              state.doctorType)
+                                          : (state is OnChatScreenPage)
+                                              ? ChatScreenPage(
+                                                  receiver: state.receiver,
+                                                  sender: state.sender,
+                                                )
+                                              : MainPage(),
     );
   }
 }
