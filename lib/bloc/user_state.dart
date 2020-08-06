@@ -19,13 +19,3 @@ class UserLoaded extends UserState {
   @override
   List<Object> get props => [user];
 }
-
-// class AllUserLoaded extends UserState {
-//   // user disini untuk menyimpan data user
-//   // final User user;
-//   final List<User> userList;
-//   AllUserLoaded(this.userList);
-
-//   @override
-//   List<Object> get props => [userList];
-// }

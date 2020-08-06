@@ -37,6 +37,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnDoctorSelectedPage(event.doctorType);
     } else if (event is GoToChatScreenPage) {
       yield OnChatScreenPage(event.receiver, event.sender);
+    } else if (event is GoToCallScreenPage) {
+      yield OnCallScreenPage(event.call);
     }
   }
 }

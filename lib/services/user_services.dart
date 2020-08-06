@@ -5,9 +5,6 @@ class UserServices {
   static CollectionReference _userCollection =
       Firestore.instance.collection('users');
 
-  // static CollectionReference _doctorCollection =
-  //     Firestore.instance.collection('doctors');
-
   // create and update user
   static Future<void> updateUser(User user) async {
     await _userCollection.document(user.id).setData({
@@ -19,6 +16,19 @@ class UserServices {
       'noSIP': user.noSIP ?? "",
       'status': user.status ?? ""
     });
+  }
+
+  static Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser currentUser;
+    currentUser = await AuthServices._auth.currentUser();
+    return currentUser;
+  }
+
+  static Future<User> getUserDetails() async {
+    FirebaseUser currentUser = await getCurrentUser();
+    DocumentSnapshot documentSnapshot =
+        await _userCollection.document(currentUser.uid).get();
+    return User.fromMap(documentSnapshot.data);
   }
 
   // check and get user from firestore
@@ -44,36 +54,4 @@ class UserServices {
     }
     return userList;
   }
-
-  // // create and update doctors
-  // static Future<void> createAndUpdateDoctor(Doctor doctor) async {
-  //   _doctorCollection.document(doctor.id).setData({
-  //     'email': doctor.email,
-  //     'noSIP': doctor.noSip,
-  //     'fullName': doctor.doctorName,
-  //     'speciality': doctor.speciality,
-  //     'rating': doctor.noSip,
-  //     'profileImage': doctor.profileImage ?? "no_pic",
-  //   });
-  // }
-
-  // // check and get doctors from firestore
-  // static Future<Doctor> getDoctor(String id) async {
-  //   DocumentSnapshot snapshot = await _doctorCollection.document(id).get();
-  //   return Doctor(
-  //     id,
-  //     snapshot.data['email'],
-  //     noSip: snapshot.data['noSIP'],
-  //     doctorName: snapshot.data['fullName'],
-  //     speciality: snapshot.data['speciality'],
-  //     rating: snapshot.data['rating'],
-  //     profileImage: snapshot.data['profileImage'],
-  //   );
-  // }
-
-  // // get all doctors
-  // static Future fetchAllDoctors() async {
-  //   QuerySnapshot querySnapshot = await _doctorCollection.getDocuments();
-  //   return querySnapshot;
-  // }
 }

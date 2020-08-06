@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:path/path.dart';
+import 'package:random_string/random_string.dart';
 
 part 'welcome_page.dart';
 part 'login_page.dart';
@@ -38,3 +39,5 @@ part 'chat_list_page.dart';
 part 'chat_screen.dart';
 part 'registration_page.dart';
 part 'doctor_registration_page.dart';
+part 'pickup_screen.dart';
+part 'call_screen.dart';

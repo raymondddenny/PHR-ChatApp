@@ -3,6 +3,7 @@ part of 'services.dart';
 // class for authentication user , sign in and sign up
 class AuthServices {
   static FirebaseAuth _auth = FirebaseAuth.instance;
+  static FirebaseAuth get auth => _auth;
 
   // method signUp user
   static Future<SignInSignUpResult> signUp({
@@ -19,6 +20,7 @@ class AuthServices {
         password: password,
       );
 
+      // convert firebase user ke user
       User user = result.user.convertToUser(
           fullName: fullName, job: job, noSIP: noSIP, status: status);
 
@@ -30,58 +32,19 @@ class AuthServices {
     }
   }
 
-  // // method signUp Doctor
-  // static Future<SignInSignUpResultDoctor> signUpDoctor(
-  //     String fullName,
-  //     String emailAdress,
-  //     String password,
-  //     String noSip,
-  //     String speciality) async {
-  //   try {
-  //     AuthResult result = await _auth.createUserWithEmailAndPassword(
-  //         email: emailAdress, password: password);
-  //     Doctor doctor = result.user.convertToDoctor(
-  //         doctorName: fullName, noSip: noSip, speciality: speciality);
-
-  //     // store data to firebase
-  //     await UserServices.createAndUpdateDoctor(doctor);
-  //     return SignInSignUpResultDoctor(doctor: doctor);
-  //   } catch (e) {
-  //     return SignInSignUpResultDoctor(
-  //         message: e.toString().split(',')[1].trim());
-  //   }
-  // }
-
   // sign in services
   static Future<SignInSignUpResult> signIn(
       {String email, String password}) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      // if success, create user
+      // get data from firestore and sign to User
       User user = await result.user.fromFireStore();
       return SignInSignUpResult(user: user);
     } catch (e) {
       return SignInSignUpResult(message: e.toString().split(',')[1].trim());
     }
   }
-
-  // // static Future<SignInSignUpResultDoctor> signInDoctor(
-  // //   String email,
-  // //   String password,
-  // // ) async {
-  // //   try {
-  // //     AuthResult result = await _auth.signInWithEmailAndPassword(
-  // //         email: email, password: password);
-
-  // //     // if success, create doctors user
-  // //     Doctor doctor = await result.user.fromDoctorFireStore();
-  // //     return SignInSignUpResultDoctor(doctor: doctor);
-  // //   } catch (e) {
-  // //     return SignInSignUpResultDoctor(
-  // //         message: e.toString().split(',')[1].trim());
-  // //   }
-  // }
 
   // sign out services
   static Future<void> signOut() async {
@@ -104,11 +67,3 @@ class SignInSignUpResult {
 
   SignInSignUpResult({this.user, this.message});
 }
-
-// class SignInSignUpResultDoctor {
-//   // this method is for check if there are errors happen when user sign in or sign up
-//   final Doctor doctor;
-//   final String message;
-
-//   SignInSignUpResultDoctor({this.doctor, this.message});
-// }

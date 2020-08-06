@@ -73,3 +73,11 @@ class GoToChatScreenPage extends PageEvent {
   @override
   List<Object> get props => [receiver];
 }
+
+class GoToCallScreenPage extends PageEvent {
+  final Call call;
+  GoToCallScreenPage({this.call});
+
+  @override
+  List<Object> get props => [call];
+}

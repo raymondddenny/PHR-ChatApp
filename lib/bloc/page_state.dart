@@ -81,3 +81,10 @@ class OnChatScreenPage extends PageState {
   @override
   List<Object> get props => [receiver];
 }
+
+class OnCallScreenPage extends PageState {
+  final Call call;
+  OnCallScreenPage(this.call);
+  @override
+  List<Object> get props => [call];
+}

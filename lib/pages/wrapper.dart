@@ -50,7 +50,9 @@ class Wrapper extends StatelessWidget {
                                                   receiver: state.receiver,
                                                   sender: state.sender,
                                                 )
-                                              : MainPage(),
+                                              : (state is OnCallScreenPage)
+                                                  ? CallScreen(call: state.call)
+                                                  : MainPage(),
     );
   }
 }

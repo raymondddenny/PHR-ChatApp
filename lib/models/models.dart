@@ -8,3 +8,4 @@ part 'registration_user_data.dart';
 part 'doctor.dart';
 part 'doctor_type.dart';
 part 'message.dart';
+part 'call.dart';

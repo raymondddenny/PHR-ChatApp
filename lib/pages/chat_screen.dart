@@ -313,13 +313,25 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                   padding: EdgeInsets.all(0),
                   width: 38,
                   child: IconButton(
-                    icon: Icon(
-                      Icons.video_call,
-                      size: 32,
-                      color: mainColor,
-                    ),
-                    onPressed: () {},
-                  ),
+                      icon: Icon(
+                        Icons.video_call,
+                        size: 32,
+                        color: mainColor,
+                      ),
+                      onPressed: () {
+                        CallUtils.dial(
+                          context: context,
+                          userCaller: widget.sender,
+                          userReceiver: widget.receiver,
+                        );
+                        bool hasCallMade = CallUtils.hasCallMade;
+                        if (hasCallMade) {
+                          Call call = CallUtils.call;
+                          context
+                              .bloc<PageBloc>()
+                              .add(GoToCallScreenPage(call: call));
+                        }
+                      }),
                 ),
           // *send button
           (isWriting)
@@ -365,4 +377,24 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
 
     MessageServices.addMessageToDb(_message, widget.sender, widget.receiver);
   }
+
+  // bool callDial(
+  //     {BuildContext context, User userCaller, User userReceiver}) async {
+  //   Call call = Call(
+  //     callerId: userCaller.id,
+  //     callerName: userCaller.fullName,
+  //     callerPhoto: userCaller.profileImage,
+  //     receiverId: userReceiver.id,
+  //     receiverName: userReceiver.fullName,
+  //     receiverPhoto: userReceiver.profileImage,
+  //     // generate random callRoomId
+  //     callChannedId: randomAlphaNumeric(25),
+  //   );
+
+  //   bool callMade = await CallServices.makeCall(call: call);
+
+  //   call.hasDialled = true;
+
+  //   return callMade;
+  // }
 }
