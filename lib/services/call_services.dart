@@ -31,4 +31,7 @@ class CallServices {
       return false;
     }
   }
+
+  Stream<DocumentSnapshot> callStream({String id}) =>
+      _callCollection.document(id).snapshots();
 }

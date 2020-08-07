@@ -377,24 +377,4 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
 
     MessageServices.addMessageToDb(_message, widget.sender, widget.receiver);
   }
-
-  // bool callDial(
-  //     {BuildContext context, User userCaller, User userReceiver}) async {
-  //   Call call = Call(
-  //     callerId: userCaller.id,
-  //     callerName: userCaller.fullName,
-  //     callerPhoto: userCaller.profileImage,
-  //     receiverId: userReceiver.id,
-  //     receiverName: userReceiver.fullName,
-  //     receiverPhoto: userReceiver.profileImage,
-  //     // generate random callRoomId
-  //     callChannedId: randomAlphaNumeric(25),
-  //   );
-
-  //   bool callMade = await CallServices.makeCall(call: call);
-
-  //   call.hasDialled = true;
-
-  //   return callMade;
-  // }
 }
