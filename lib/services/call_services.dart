@@ -32,6 +32,6 @@ class CallServices {
     }
   }
 
-  Stream<DocumentSnapshot> callStream({String id}) =>
+  static Stream<DocumentSnapshot> callStream({String id}) =>
       _callCollection.document(id).snapshots();
 }

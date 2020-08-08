@@ -152,7 +152,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
 
   // to show the message from the sender
   Widget senderLayout(Message message) {
-    Radius messageRadius = Radius.circular(10);
+    Radius messageRadius = Radius.circular(5);
     String time = DateFormat.jm().format(message.timeStamp.toDate());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -167,7 +167,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
                 bottomRight: messageRadius,
               )),
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: getMessage(message),
           ),
         ),
@@ -184,7 +184,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
 
   // to show the message from the receiver
   Widget receiverLayout(Message message) {
-    Radius messageRadius = Radius.circular(10);
+    Radius messageRadius = Radius.circular(5);
     return Container(
       margin: EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
@@ -194,7 +194,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
             topRight: messageRadius,
             bottomRight: messageRadius,
           )),
-      child: Padding(padding: EdgeInsets.all(10), child: getMessage(message)),
+      child: Padding(padding: EdgeInsets.all(5), child: getMessage(message)),
     );
   }
 
@@ -202,7 +202,10 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
   getMessage(Message message) {
     return message.type == "image"
         ? CachedImage(
-            imageUrl: message.photoUrl,
+            message.photoUrl,
+            height: 250,
+            width: 250,
+            radius: 10,
           )
         : Text(
             message.message,

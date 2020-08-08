@@ -20,10 +20,12 @@ class PickUpScreen extends StatelessWidget {
             SizedBox(
               height: 50,
             ),
-            Image.network(
+            CachedImage(
               call.callerPhoto,
               height: 200,
               width: 200,
+              isRounded: true,
+              radius: 180,
             ),
             SizedBox(
               height: 20,
