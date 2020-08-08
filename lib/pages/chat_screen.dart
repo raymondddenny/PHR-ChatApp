@@ -13,9 +13,13 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
   ImageUploadProvider _imageUploadProvider;
   @override
   Widget build(BuildContext context) {
+    // set Theme
+    context
+        .bloc<ThemeBloc>()
+        .add(ChangeTheme(ThemeData().copyWith(primaryColor: mainColor)));
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     return WillPopScope(onWillPop: () async {
-      context.bloc<PageBloc>().add(GoToMainPage());
+      context.bloc<PageBloc>().add(GoToMainPage(bottomNavBarIndex: 1));
       return;
     }, child: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
       return Scaffold(

@@ -27,13 +27,6 @@ class ChatListContainer extends StatefulWidget {
 }
 
 class _ChatListContainerState extends State<ChatListContainer> {
-  // // get all doctors
-  // Future fetchAllDoctors() async {
-  //   var fireStore = Firestore.instance;
-  //   QuerySnapshot querySnapshot =
-  //       await fireStore.collection("users").getDocuments();
-  //   return querySnapshot.documents;
-  // }
   List<User> userList;
   User sender;
   @override

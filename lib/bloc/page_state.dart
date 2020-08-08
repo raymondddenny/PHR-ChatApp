@@ -20,8 +20,11 @@ class OnWelcomePage extends PageState {
 }
 
 class OnMainPage extends PageState {
+  final int bottomNavBarindex;
+
+  OnMainPage({this.bottomNavBarindex = 0});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [bottomNavBarindex];
 }
 
 class OnRegistrationPage extends PageState {
@@ -79,7 +82,7 @@ class OnChatScreenPage extends PageState {
   OnChatScreenPage(this.receiver, this.sender);
 
   @override
-  List<Object> get props => [receiver];
+  List<Object> get props => [receiver, sender];
 }
 
 class OnCallScreenPage extends PageState {
@@ -87,4 +90,9 @@ class OnCallScreenPage extends PageState {
   OnCallScreenPage(this.call);
   @override
   List<Object> get props => [call];
+}
+
+class OnChatListScreenPage extends PageState {
+  @override
+  List<Object> get props => [];
 }

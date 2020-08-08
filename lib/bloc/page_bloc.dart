@@ -20,7 +20,7 @@ class PageBloc extends Bloc<PageEvent, PageState> {
     } else if (event is GoToLoginPage) {
       yield OnLoginPage();
     } else if (event is GoToMainPage) {
-      yield OnMainPage();
+      yield OnMainPage(bottomNavBarindex: event.bottomNavBarIndex);
     } else if (event is GoToRegistrationPage) {
       yield OnRegistrationPage();
     } else if (event is GoToRegistrationUserPage) {
@@ -39,6 +39,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnChatScreenPage(event.receiver, event.sender);
     } else if (event is GoToCallScreenPage) {
       yield OnCallScreenPage(event.call);
+    } else if (event is GoToChatListScreenPage) {
+      yield OnChatListScreenPage();
     }
   }
 }

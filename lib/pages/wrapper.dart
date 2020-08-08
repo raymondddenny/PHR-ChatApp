@@ -52,7 +52,14 @@ class Wrapper extends StatelessWidget {
                                                 )
                                               : (state is OnCallScreenPage)
                                                   ? CallScreen(call: state.call)
-                                                  : MainPage(),
+                                                  : (state
+                                                          is OnChatListScreenPage)
+                                                      ? ChatListScreen()
+                                                      : MainPage(
+                                                          bottomNavBarIndex: (state
+                                                                  as OnMainPage)
+                                                              .bottomNavBarindex,
+                                                        ),
     );
   }
 }

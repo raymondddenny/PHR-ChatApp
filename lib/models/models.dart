@@ -9,3 +9,4 @@ part 'doctor.dart';
 part 'doctor_type.dart';
 part 'message.dart';
 part 'call.dart';
+part 'contact.dart';

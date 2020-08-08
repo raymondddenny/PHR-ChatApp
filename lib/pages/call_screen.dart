@@ -351,7 +351,7 @@ class _CallScreenState extends State<CallScreen> {
               child: Stack(
                 children: <Widget>[
                   _viewRows(),
-                  // _panel(),
+                  _panel(),
                   _toolbar(),
                 ],
               ),

@@ -15,8 +15,10 @@ class GoToLoginPage extends PageEvent {
 }
 
 class GoToMainPage extends PageEvent {
+  final bottomNavBarIndex;
+  GoToMainPage({this.bottomNavBarIndex = 0});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [bottomNavBarIndex];
 }
 
 class GoToRegistrationPage extends PageEvent {
@@ -71,7 +73,7 @@ class GoToChatScreenPage extends PageEvent {
   final User sender;
   GoToChatScreenPage({this.receiver, this.sender});
   @override
-  List<Object> get props => [receiver];
+  List<Object> get props => [receiver, sender];
 }
 
 class GoToCallScreenPage extends PageEvent {
@@ -80,4 +82,9 @@ class GoToCallScreenPage extends PageEvent {
 
   @override
   List<Object> get props => [call];
+}
+
+class GoToChatListScreenPage extends PageEvent {
+  @override
+  List<Object> get props => [];
 }

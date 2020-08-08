@@ -54,4 +54,16 @@ class UserServices {
     }
     return userList;
   }
+
+  static void setUserState(
+      {@required String userId, @required UserStates userStates}) {
+    int stateNum = CallUtils.stateToNum(userStates);
+
+    _userCollection.document(userId).updateData({
+      "state": stateNum,
+    });
+  }
+
+  static Stream<DocumentSnapshot> getUserStream({@required String uid}) =>
+      _userCollection.document(uid).snapshots();
 }
