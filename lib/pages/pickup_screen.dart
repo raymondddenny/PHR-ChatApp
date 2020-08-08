@@ -46,6 +46,9 @@ class PickUpScreen extends StatelessWidget {
                           .bloc<PageBloc>()
                           .add(GoToCallScreenPage(call: call));
                     }),
+                SizedBox(
+                  width: 25,
+                ),
                 IconButton(
                     icon: Icon(Icons.call_end, color: Colors.red),
                     onPressed: () async {
