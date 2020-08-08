@@ -321,19 +321,25 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                         size: 32,
                         color: mainColor,
                       ),
-                      onPressed: () {
-                        CallUtils.dial(
-                          context: context,
-                          userCaller: widget.sender,
-                          userReceiver: widget.receiver,
-                        );
-                        bool hasCallMade = CallUtils.hasCallMade;
-                        if (hasCallMade) {
-                          Call call = CallUtils.call;
-                          context
-                              .bloc<PageBloc>()
-                              .add(GoToCallScreenPage(call: call));
-                        }
+                      onPressed: () async {
+                        print("Masuk sini");
+                        bool getPermission = await Permissions
+                            .cameraAndMicrophonePermissionsGranted();
+                        if (getPermission) {
+                          print("Masuk sini lagi");
+                          CallUtils.dial(
+                            context: context,
+                            userCaller: widget.sender,
+                            userReceiver: widget.receiver,
+                          );
+                          bool hasCallMade = CallUtils.hasCallMade;
+                          if (hasCallMade) {
+                            Call call = CallUtils.call;
+                            context
+                                .bloc<PageBloc>()
+                                .add(GoToCallScreenPage(call: call));
+                          }
+                        } else {}
                       }),
                 ),
           // *send button

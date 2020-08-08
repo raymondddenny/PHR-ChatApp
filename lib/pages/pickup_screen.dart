@@ -41,11 +41,12 @@ class PickUpScreen extends StatelessWidget {
               children: [
                 IconButton(
                     icon: Icon(Icons.call, color: Colors.green),
-                    onPressed: () {
-                      context
-                          .bloc<PageBloc>()
-                          .add(GoToCallScreenPage(call: call));
-                    }),
+                    onPressed: () async => await Permissions
+                            .cameraAndMicrophonePermissionsGranted()
+                        ? context
+                            .bloc<PageBloc>()
+                            .add(GoToCallScreenPage(call: call))
+                        : {}),
                 SizedBox(
                   width: 25,
                 ),
