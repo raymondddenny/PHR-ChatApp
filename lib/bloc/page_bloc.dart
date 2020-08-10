@@ -9,7 +9,7 @@ part 'page_state.dart';
 
 class PageBloc extends Bloc<PageEvent, PageState> {
   // intial bloc v6
-  PageBloc() : super(OnInitialPage());
+  PageBloc() : super(OnWelcomePage());
 
   @override
   Stream<PageState> mapEventToState(
@@ -41,6 +41,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnCallScreenPage(event.call);
     } else if (event is GoToChatListScreenPage) {
       yield OnChatListScreenPage();
+    } else if (event is GoToUserProfilePageMenu) {
+      yield OnUserProfilePageMenu();
     }
   }
 }

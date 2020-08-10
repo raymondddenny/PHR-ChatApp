@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -13,7 +14,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:phr_skripsi_chat/bloc/blocs.dart';
 import 'package:phr_skripsi_chat/models/models.dart';
 import 'package:phr_skripsi_chat/provider/providers.dart';
@@ -44,3 +47,5 @@ part 'doctor_registration_page.dart';
 part 'pickup_screen.dart';
 part 'call_screen.dart';
 part 'pickup_layout.dart';
+part 'view_image.dart';
+part 'user_profile_page_menu.dart';

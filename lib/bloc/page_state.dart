@@ -61,6 +61,11 @@ class OnUserProfilePage extends PageState {
   List<Object> get props => [];
 }
 
+class OnUserProfilePageMenu extends PageState {
+  @override
+  List<Object> get props => [];
+}
+
 class OnEditProfilePage extends PageState {
   final User user;
 

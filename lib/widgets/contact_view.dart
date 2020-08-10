@@ -15,13 +15,9 @@ class ContactView extends StatelessWidget {
           return ViewLayout(
             contact: user,
           );
+        } else {
+          return Container();
         }
-        return Center(
-          child: SpinKitFadingCircle(
-            color: accentColor2,
-            size: 50,
-          ),
-        );
       },
     );
   }
@@ -45,29 +41,17 @@ class ViewLayout extends StatelessWidget {
               constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
               child: Stack(
                 children: [
-                  // CircleAvatar(
-                  //   maxRadius: 30,
-                  //   backgroundColor: accentColor3,
-                  //   backgroundImage: AssetImage("images/doctor.png"),
-                  // ),
                   CachedImage(
                     contact.profileImage,
                     radius: 80,
                     isRounded: true,
                   ),
-                  // Align(
-                  //   alignment: Alignment.bottomRight,
-                  //   child: Container(
-                  //     width: 15,
-                  //     height: 15,
-                  //     decoration: BoxDecoration(
-                  //       shape: BoxShape.circle,
-                  //       color: onlineDotColor,
-                  //     ),
-                  //   ),
-                  // )
-                  OnlineDotIndicator(
-                    uid: contact.id,
+                  Positioned(
+                    bottom: 0,
+                    left: 48,
+                    child: OnlineDotIndicator(
+                      uid: contact.id,
+                    ),
                   ),
                 ],
               ),
@@ -84,12 +68,7 @@ class ViewLayout extends StatelessWidget {
             ),
           );
         } else {
-          return Center(
-            child: SpinKitFadingCircle(
-              color: accentColor2,
-              size: 50,
-            ),
-          );
+          return Container();
         }
       },
     );

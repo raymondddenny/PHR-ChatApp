@@ -52,6 +52,11 @@ class GoToUserProfilePage extends PageEvent {
   List<Object> get props => [];
 }
 
+class GoToUserProfilePageMenu extends PageEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class GoToEditProfilePage extends PageEvent {
   final User user;
 

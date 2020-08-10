@@ -40,26 +40,29 @@ class Wrapper extends StatelessWidget {
                                   state.registrationUserData)
                               : (state is OnUserProfilePage)
                                   ? UserProfilePage()
-                                  : (state is OnEditProfilePage)
-                                      ? EditProfilePage(state.user)
-                                      : (state is OnDoctorSelectedPage)
-                                          ? DoctorSelectedPageList(
-                                              state.doctorType)
-                                          : (state is OnChatScreenPage)
-                                              ? ChatScreenPage(
-                                                  receiver: state.receiver,
-                                                  sender: state.sender,
-                                                )
-                                              : (state is OnCallScreenPage)
-                                                  ? CallScreen(call: state.call)
-                                                  : (state
-                                                          is OnChatListScreenPage)
-                                                      ? ChatListScreen()
-                                                      : MainPage(
-                                                          bottomNavBarIndex: (state
-                                                                  as OnMainPage)
-                                                              .bottomNavBarindex,
-                                                        ),
+                                  : (state is OnUserProfilePageMenu)
+                                      ? UserProfilePageMenu()
+                                      : (state is OnEditProfilePage)
+                                          ? EditProfilePage(state.user)
+                                          : (state is OnDoctorSelectedPage)
+                                              ? DoctorSelectedPageList(
+                                                  state.doctorType)
+                                              : (state is OnChatScreenPage)
+                                                  ? ChatScreenPage(
+                                                      receiver: state.receiver,
+                                                      sender: state.sender,
+                                                    )
+                                                  : (state is OnCallScreenPage)
+                                                      ? CallScreen(
+                                                          call: state.call)
+                                                      : (state
+                                                              is OnChatListScreenPage)
+                                                          ? ChatListScreen()
+                                                          : MainPage(
+                                                              bottomNavBarIndex:
+                                                                  (state as OnMainPage)
+                                                                      .bottomNavBarindex,
+                                                            ),
     );
   }
 }

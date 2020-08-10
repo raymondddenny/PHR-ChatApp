@@ -13,6 +13,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   int bottomNavbarIndex;
   // untuk mengatur pageview
   PageController pageController;
+  // PersistentTabController pageController;
 
   @override
   void initState() {
@@ -92,62 +93,168 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .bloc<ThemeBloc>()
+        .add(ChangeTheme(ThemeData().copyWith(primaryColor: mainColor)));
     return PickupLayout(
-      scaffold: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              color: mainColor,
-            ),
-            SafeArea(child: Container(color: Colors.white)),
-            PageView(
-              controller: pageController,
-              physics: NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() {
-                  bottomNavbarIndex = index;
-                });
-              },
-              children: [
-                DoctorPage(DoctorType()),
-                ChatListScreen(),
-                HospitalPage(),
-              ],
-            ),
-          ],
-        ),
-        bottomNavigationBar: CurvedNavigationBar(
-          height: 50,
-          color: mainColor,
-          buttonBackgroundColor: mainColor,
-          backgroundColor: Colors.transparent,
-          animationDuration: Duration(milliseconds: 200),
-          animationCurve: Curves.bounceInOut,
-          index: bottomNavbarIndex,
-          items: <Widget>[
-            Icon(
-              Icons.perm_contact_calendar,
-              size: 28,
-              color: accentColor2,
-            ),
-            Icon(
-              Icons.chat,
-              size: 28,
-              color: accentColor2,
-            ),
-            Icon(
-              Icons.map,
-              size: 28,
-              color: accentColor2,
-            ),
-          ],
-          onTap: (index) {
-            setState(() {
-              bottomNavbarIndex = index;
-              pageController.jumpToPage(index);
-            });
-          },
-        ),
+      scaffold: BlocBuilder<UserBloc, UserState>(
+        builder: (context, userState) {
+          if (userState is UserLoaded) {
+            if (userState.user.status == "Patient") {
+              // if user adalah pasien
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: BlocBuilder<UserBloc, UserState>(
+                  builder: (context, userState) {
+                    if (userState is UserLoaded) {
+                      return Stack(
+                        children: [
+                          Container(
+                            color: mainColor,
+                          ),
+                          SafeArea(child: Container(color: mainColor)),
+                          PageView(
+                            controller: pageController,
+                            physics: NeverScrollableScrollPhysics(),
+                            onPageChanged: (index) {
+                              setState(() {
+                                bottomNavbarIndex = index;
+                              });
+                            },
+                            children: [
+                              DoctorPage(DoctorType()),
+                              ChatListScreen(),
+                              // HospitalPage(),
+                              UserProfilePageMenu(),
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+                bottomNavigationBar: BottomNavyBar(
+                  showElevation: true,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  iconSize: 32,
+                  selectedIndex: bottomNavbarIndex,
+                  onItemSelected: (index) {
+                    setState(() => bottomNavbarIndex = index);
+                    pageController.jumpToPage(index);
+                  },
+                  items: <BottomNavyBarItem>[
+                    BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.perm_contact_calendar,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Homepage")),
+                    BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.chat,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Messages")),
+                    BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.person_pin,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Profile")),
+                  ],
+                ),
+              );
+            } else {
+              // if user adalah dokter
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: BlocBuilder<UserBloc, UserState>(
+                  builder: (context, userState) {
+                    if (userState is UserLoaded) {
+                      return Stack(
+                        children: [
+                          Container(
+                            color: mainColor,
+                          ),
+                          SafeArea(child: Container(color: mainColor)),
+                          PageView(
+                            controller: pageController,
+                            physics: NeverScrollableScrollPhysics(),
+                            onPageChanged: (index) {
+                              setState(() {
+                                bottomNavbarIndex = index;
+                              });
+                            },
+                            children: [
+                              // DoctorPage(DoctorType()),
+                              ChatListScreen(),
+                              // HospitalPage(),
+                              UserProfilePageMenu(),
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+                bottomNavigationBar: BottomNavyBar(
+                  showElevation: true,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  iconSize: 32,
+                  selectedIndex: bottomNavbarIndex,
+                  onItemSelected: (index) {
+                    setState(() => bottomNavbarIndex = index);
+                    pageController.jumpToPage(index);
+                  },
+                  items: <BottomNavyBarItem>[
+                    // BottomNavyBarItem(
+                    //     activeColor: mainColor,
+                    //     inactiveColor: accentColor7,
+                    //     icon: Icon(
+                    //       Icons.perm_contact_calendar,
+                    //       // size: 28,
+                    //       // color: accentColor2,
+                    //     ),
+                    //     title: Text("Homepage")),
+                    BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.chat,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Messages")),
+                    BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.person_pin,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Profile")),
+                  ],
+                ),
+              );
+            }
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

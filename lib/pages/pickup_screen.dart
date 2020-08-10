@@ -38,6 +38,7 @@ class PickUpScreen extends StatelessWidget {
               height: 75,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                     icon: Icon(Icons.call, color: Colors.green),

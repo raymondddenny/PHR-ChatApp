@@ -29,8 +29,8 @@ Future<String> uploadImage(File image) async {
 
 void uploadImageMessage(
     {File image,
-    String receiverId,
-    String senderId,
+    User receiver,
+    User sender,
     ImageUploadProvider imageUploadProvider}) async {
 // set loading when user already pick image
   imageUploadProvider.setToLoading();
@@ -39,18 +39,20 @@ void uploadImageMessage(
   // hide loading
   imageUploadProvider.setToIdle();
 
-  setImageMessage(imageMsgUrl, receiverId, senderId, imageUploadProvider);
+  setImageMessage(imageMsgUrl, receiver, sender, imageUploadProvider);
 }
 
-void setImageMessage(String imageMsgUrl, String receiverId, String senderId,
+void setImageMessage(String imageMsgUrl, User receiver, User sender,
     ImageUploadProvider imageUploadProvider) async {
   CollectionReference _messageCollection =
       Firestore.instance.collection('messages');
   Message _message;
   _message = Message.imageMessage(
     message: "IMAGE",
-    receiverId: receiverId,
-    senderId: senderId,
+    receiverId: receiver.id,
+    senderName: sender.fullName,
+    receiverName: receiver.fullName,
+    senderId: sender.id,
     photoUrl: imageMsgUrl,
     timeStamp: Timestamp.now(),
     type: "image",
@@ -66,6 +68,8 @@ void setImageMessage(String imageMsgUrl, String receiverId, String senderId,
     'message': map.message,
     'senderId': map.senderId,
     'receiverId': map.receiverId,
+    'senderName': map.senderName,
+    'receiverName': map.receiverName,
     'timeStamp': map.timeStamp,
     'type': map.type,
     'photoUrl': map.photoUrl,

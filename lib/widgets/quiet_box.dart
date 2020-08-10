@@ -11,7 +11,12 @@ class QuietBox extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text("No contacts")],
+            children: [
+              Text(
+                "No Message. Start your consultation now!",
+                style: blackTextFont.copyWith(fontSize: 28),
+              )
+            ],
           ),
         ),
       ),

@@ -2,7 +2,9 @@ part of 'models.dart';
 
 class Message extends Equatable {
   final String senderId;
+  final String senderName;
   final String receiverId;
+  final String receiverName;
   final String type;
   final String message;
   final Timestamp timeStamp;
@@ -11,6 +13,8 @@ class Message extends Equatable {
   Message(
       {this.senderId,
       this.receiverId,
+      this.senderName,
+      this.receiverName,
       this.type,
       this.message,
       this.timeStamp,
@@ -19,6 +23,8 @@ class Message extends Equatable {
   // to perform send image message
   Message.imageMessage(
       {this.senderId,
+      this.senderName,
+      this.receiverName,
       this.receiverId,
       this.type,
       this.message,
@@ -27,6 +33,8 @@ class Message extends Equatable {
 
   Message toMap() => Message(
         senderId: senderId ?? this.senderId,
+        senderName: senderName ?? this.senderName,
+        receiverName: receiverName ?? this.receiverName,
         receiverId: receiverId ?? this.receiverId,
         type: type ?? this.receiverId,
         message: message ?? this.message,
@@ -35,6 +43,8 @@ class Message extends Equatable {
 
   Message toImageMap() => Message(
         senderId: senderId ?? this.senderId,
+        senderName: senderName ?? this.senderName,
+        receiverName: receiverName ?? this.receiverName,
         receiverId: receiverId ?? this.receiverId,
         type: type ?? this.receiverId,
         message: message ?? this.message,
@@ -45,6 +55,8 @@ class Message extends Equatable {
   factory Message.fromMap(Map<String, dynamic> mapData) {
     return Message(
       senderId: mapData['senderId'],
+      senderName: mapData['senderName'],
+      receiverName: mapData['receiverName'],
       receiverId: mapData['receiverId'],
       type: mapData['type'],
       message: mapData['message'],
@@ -56,6 +68,8 @@ class Message extends Equatable {
   @override
   List<Object> get props => [
         senderId,
+        senderName,
+        receiverName,
         receiverId,
         type,
         message,
@@ -63,8 +77,3 @@ class Message extends Equatable {
         photoUrl,
       ];
 }
-
-// var map = Map<String, dynamic>();
-// map['senderId'] = this.senderId;
-// map['receiverId'] = this.receiverId;
-// map['type'] = this.type;

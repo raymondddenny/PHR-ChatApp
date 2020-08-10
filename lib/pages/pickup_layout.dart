@@ -28,12 +28,26 @@ class PickupLayout extends StatelessWidget {
             },
           );
         } else {
-          return SpinKitFadingCircle(
-            color: accentColor2,
-            size: 50,
-          );
+          return WelcomeIntroLogo();
         }
       },
+    );
+  }
+}
+
+class WelcomeIntroLogo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: accentColor5.withOpacity(0.1),
+      body: Center(
+        child: Container(
+          child: AnimatedContainer(
+              duration: Duration(seconds: 1),
+              curve: Curves.bounceInOut,
+              child: Image(image: AssetImage("images/logo.png"))),
+        ),
+      ),
     );
   }
 }

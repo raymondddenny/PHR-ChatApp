@@ -49,16 +49,13 @@ class ChatListScreenContainer extends StatelessWidget {
                         });
                   } else {
                     return Center(
-                      child: SpinKitFadingCircle(
-                        color: accentColor2,
-                        size: 50,
-                      ),
-                    );
+                        child: SpinKitFadingCircle(
+                            color: accentColor2, size: 100));
                   }
                 }),
           );
         } else {
-          return SpinKitFadingCircle(color: accentColor2);
+          return Container();
         }
       },
     );

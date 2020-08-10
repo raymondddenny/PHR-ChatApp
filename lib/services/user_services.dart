@@ -18,18 +18,18 @@ class UserServices {
     });
   }
 
-  static Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser currentUser;
-    currentUser = await AuthServices._auth.currentUser();
-    return currentUser;
-  }
+  // static Future<FirebaseUser> getCurrentUser() async {
+  //   FirebaseUser currentUser;
+  //   currentUser = await AuthServices._auth.currentUser();
+  //   return currentUser;
+  // }
 
-  static Future<User> getUserDetails() async {
-    FirebaseUser currentUser = await getCurrentUser();
-    DocumentSnapshot documentSnapshot =
-        await _userCollection.document(currentUser.uid).get();
-    return User.fromMap(documentSnapshot.data);
-  }
+  // static Future<User> getUserDetails() async {
+  //   FirebaseUser currentUser = await getCurrentUser();
+  //   DocumentSnapshot documentSnapshot =
+  //       await _userCollection.document(currentUser.uid).get();
+  //   return User.fromMap(documentSnapshot.data);
+  // }
 
   // check and get user from firestore
   static Future<User> getUser(String id) async {
@@ -54,6 +54,15 @@ class UserServices {
     }
     return userList;
   }
+
+  //   static Future<List<User>> getAllUserDoctor(String job) async {
+  //   List<User> userList = List<User>();
+  //   QuerySnapshot querySnapshot = await _userCollection.getDocuments();
+  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
+  //     userList.add(User.fromMap(querySnapshot.documents[i].data));
+  //   }
+  //   return userList;
+  // }
 
   static void setUserState(
       {@required String userId, @required UserStates userStates}) {

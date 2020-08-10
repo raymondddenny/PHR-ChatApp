@@ -29,6 +29,7 @@ class ChatListContainer extends StatefulWidget {
 class _ChatListContainerState extends State<ChatListContainer> {
   List<User> userList;
   User sender;
+  bool check = false;
   @override
   Widget build(BuildContext context) {
     String queryDoctor = widget.doctorSpeciality;
@@ -38,8 +39,37 @@ class _ChatListContainerState extends State<ChatListContainer> {
           if (userState is UserLoaded) {
             userList = userState.userList;
             sender = userState.user;
+            // TODO : check lagi pas udah ada dokter yang lain
+            // check user list if have the doctors
+            for (int i = 0; i < userList.length; i++) {
+              if (userList[i].job == queryDoctor) {
+                return buildSuggestion(queryDoctor, sender);
+              } else {
+                print(userList[i].job.toString());
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No doctor found \nfor a moment",
+                        style: blackTextFont.copyWith(fontSize: 28),
+                        textAlign: TextAlign.center,
+                      ),
+                      Container(
+                          child: LottieBuilder.network(
+                        "https://assets4.lottiefiles.com/packages/lf20_wdXBRc.json",
+                        repeat: true,
+                        fit: BoxFit.contain,
+                      )),
+                    ],
+                  ),
+                );
+              }
+            }
+            return Container();
+          } else {
+            return Container();
           }
-          return buildSuggestion(queryDoctor, sender);
         },
       ),
     );

@@ -148,33 +148,56 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
             ? Alignment.centerRight
             : Alignment.centerLeft,
         child: (_message.senderId == widget._currentUserId)
-            ? senderLayout(_message)
-            : receiverLayout(_message),
+            ? senderLayout(_message, context)
+            : receiverLayout(_message, context),
       ),
     );
   }
 
   // to show the message from the sender
-  Widget senderLayout(Message message) {
+  Widget senderLayout(Message message, BuildContext context) {
     Radius messageRadius = Radius.circular(5);
     String time = DateFormat.jm().format(message.timeStamp.toDate());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Container(
-          margin: EdgeInsets.only(top: 12),
-          decoration: BoxDecoration(
-              color: accentColor1,
-              borderRadius: BorderRadius.only(
-                bottomLeft: messageRadius,
-                topLeft: messageRadius,
-                bottomRight: messageRadius,
-              )),
-          child: Padding(
-            padding: EdgeInsets.all(5),
-            child: getMessage(message),
-          ),
-        ),
+        (message.type == "image")
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewImage(message)));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 12),
+                  decoration: BoxDecoration(
+                      color: accentColor1,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: messageRadius,
+                        topLeft: messageRadius,
+                        bottomRight: messageRadius,
+                      )),
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: getMessage(message, context),
+                  ),
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.only(top: 12),
+                decoration: BoxDecoration(
+                    color: accentColor1,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: messageRadius,
+                      topLeft: messageRadius,
+                      bottomRight: messageRadius,
+                    )),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: getMessage(message, context),
+                ),
+              ),
         Align(
           alignment: Alignment.centerRight,
           child: Text(
@@ -187,24 +210,61 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
   }
 
   // to show the message from the receiver
-  Widget receiverLayout(Message message) {
+  Widget receiverLayout(Message message, BuildContext context) {
     Radius messageRadius = Radius.circular(5);
-    return Container(
-      margin: EdgeInsets.only(top: 12),
-      decoration: BoxDecoration(
-          color: accentColor2,
-          borderRadius: BorderRadius.only(
-            bottomLeft: messageRadius,
-            topRight: messageRadius,
-            bottomRight: messageRadius,
-          )),
-      child: Padding(padding: EdgeInsets.all(5), child: getMessage(message)),
+    String time = DateFormat.jm().format(message.timeStamp.toDate());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        (message.type == "image")
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewImage(message)));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 12),
+                  decoration: BoxDecoration(
+                      color: accentColor2,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: messageRadius,
+                        topRight: messageRadius,
+                        bottomRight: messageRadius,
+                      )),
+                  child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: getMessage(message, context)),
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.only(top: 12),
+                decoration: BoxDecoration(
+                    color: accentColor2,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: messageRadius,
+                      topRight: messageRadius,
+                      bottomRight: messageRadius,
+                    )),
+                child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: getMessage(message, context)),
+              ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            time,
+            style: greyTextFont,
+          ),
+        ),
+      ],
     );
   }
 
 // Send Image
-  getMessage(Message message) {
-    return message.type == "image"
+  getMessage(Message message, BuildContext context) {
+    return (message.type == "image")
         ? CachedImage(
             message.photoUrl,
             height: 250,
@@ -213,7 +273,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
           )
         : Text(
             message.message,
-            style: blackTextFont.copyWith(fontSize: 16),
+            style: whiteTextFont.copyWith(fontSize: 16),
           );
   }
 }
@@ -246,7 +306,14 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
     final String receiverName = widget.receiver.fullName;
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     return Container(
-      margin: EdgeInsets.only(left: 6, bottom: 10),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          color: Colors.grey,
+          offset: Offset(0.0, 1.0), //(x,y)
+          blurRadius: 3.0,
+        ),
+      ]),
+      margin: EdgeInsets.only(top: 10, bottom: 10),
       child: Row(
         children: [
           Expanded(
@@ -261,7 +328,9 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                     : setWritingTo(false);
               },
               decoration: InputDecoration(
-                hintText: "Tulis pesan untuk dr.$receiverName",
+                hintText: (widget.receiver.job == "Doctor")
+                    ? "Tulis pesan untuk dr.$receiverName ..."
+                    : "Tulis pesan untuk $receiverName ...",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),
@@ -289,8 +358,8 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                         File selectedImage = await getImage();
                         uploadImageMessage(
                             image: selectedImage,
-                            receiverId: widget.receiver.id,
-                            senderId: widget.sender.id,
+                            receiver: widget.receiver,
+                            sender: widget.sender,
                             imageUploadProvider: _imageUploadProvider);
                       })),
           // *camera button
@@ -309,8 +378,8 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                         File selectedImage = await getImageCamera();
                         uploadImageMessage(
                             image: selectedImage,
-                            receiverId: widget.receiver.id,
-                            senderId: widget.sender.id,
+                            receiver: widget.receiver,
+                            sender: widget.sender,
                             imageUploadProvider: _imageUploadProvider);
                       })),
           // *vidcall button

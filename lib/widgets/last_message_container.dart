@@ -13,14 +13,25 @@ class LastMessageContainer extends StatelessWidget {
           var docList = snapshot.data.documents;
           if (docList.isNotEmpty) {
             Message message = Message.fromMap(docList.last.data);
-            return SizedBox(
+            return Container(
               width: MediaQuery.of(context).size.width * 0.6,
-              child: Text(
-                message.message,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: greyTextFont.copyWith(fontSize: 14),
-              ),
+              child: (message.type == "image")
+                  ? Row(
+                      children: [
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: Image.network(message.photoUrl),
+                        ),
+                        Text("Send a photo")
+                      ],
+                    )
+                  : Text(
+                      message.message,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: greyTextFont.copyWith(fontSize: 14),
+                    ),
             );
           }
           return Text(

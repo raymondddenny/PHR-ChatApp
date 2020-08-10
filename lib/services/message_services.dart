@@ -12,6 +12,8 @@ class MessageServices {
         .add({
       'message': message.message,
       'senderId': message.senderId,
+      'senderName': sender.fullName,
+      'receiverName': receiver.fullName,
       'receiverId': message.receiverId,
       'timeStamp': message.timeStamp,
       'type': message.type,
@@ -25,6 +27,8 @@ class MessageServices {
         .add({
       'message': message.message,
       'senderId': message.senderId,
+      'senderName': sender.fullName,
+      'receiverName': receiver.fullName,
       'receiverId': message.receiverId,
       'timeStamp': message.timeStamp,
       'type': message.type,

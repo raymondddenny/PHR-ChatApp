@@ -1,6 +1,6 @@
 part of 'pages.dart';
 
-class UserProfilePage extends StatelessWidget {
+class UserProfilePageMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // set Theme
@@ -16,11 +16,11 @@ class UserProfilePage extends StatelessWidget {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.bloc<PageBloc>().add(GoToMainPage());
-                }),
+            // leading: IconButton(
+            //     icon: Icon(Icons.arrow_back),
+            //     onPressed: () {
+            //       context.bloc<PageBloc>().add(GoToMainPage());
+            //     }),
             title: Text("Profile"),
             centerTitle: true,
           ),
@@ -99,8 +99,8 @@ class UserProfilePage extends StatelessWidget {
                             color: accentColor2,
                           )),
                     ),
-                    DashDivider(),
-                    UserProfileMenuListTile(
+                    DashDividerUserProfileMenu(),
+                    UserProfileMenuListTileMenu(
                         userProfileMenuTitle: "Sign Out",
                         onTap: () {
                           context.bloc<UserBloc>().add(UserSignOut());
@@ -121,8 +121,8 @@ class UserProfilePage extends StatelessWidget {
   }
 }
 
-class DashDivider extends StatelessWidget {
-  const DashDivider({
+class DashDividerUserProfileMenu extends StatelessWidget {
+  const DashDividerUserProfileMenu({
     Key key,
   }) : super(key: key);
 
@@ -136,12 +136,12 @@ class DashDivider extends StatelessWidget {
   }
 }
 
-class UserProfileMenuListTile extends StatelessWidget {
+class UserProfileMenuListTileMenu extends StatelessWidget {
   final String userProfileMenuTitle;
   final Function onTap;
   final Icon leadingIcon;
 
-  UserProfileMenuListTile(
+  UserProfileMenuListTileMenu(
       {@required this.userProfileMenuTitle,
       @required this.onTap,
       @required this.leadingIcon});
@@ -163,7 +163,7 @@ class UserProfileMenuListTile extends StatelessWidget {
   }
 }
 
-Widget generateDashedDivider(double width) {
+Widget generateDashedDividerUserMenu(double width) {
   int n = width ~/ 5;
   return Row(
     children: List.generate(
