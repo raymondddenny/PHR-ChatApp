@@ -299,6 +299,7 @@ class _CallScreenState extends State<CallScreen> {
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
+          // TODO : tambah timer selama call, lalu ditampilkan di chat screen berapa lama call after call finish
           RawMaterialButton(
             onPressed: _onSwitchCamera,
             child: Icon(

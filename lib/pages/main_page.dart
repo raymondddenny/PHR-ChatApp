@@ -4,9 +4,12 @@ class MainPage extends StatefulWidget {
   final int bottomNavBarIndex;
 
   MainPage({this.bottomNavBarIndex = 0});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
+
+final UserServices userServices = UserServices();
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   // untuk mengatur navigation bar
@@ -15,6 +18,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   PageController pageController;
   // PersistentTabController pageController;
 
+  UserProvider userProvider;
+
   @override
   void initState() {
     super.initState();
@@ -22,20 +27,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     pageController = PageController(initialPage: bottomNavbarIndex);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      BlocBuilder<UserBloc, UserState>(
-        builder: (context, userState) {
-          if (userState is UserLoaded) {
-            UserServices.setUserState(
-                userId: userState.user.id, userStates: UserStates.Online);
-            return Container();
-          } else {
-            return SpinKitFadingCircle(
-              color: accentColor2,
-              size: 50,
-            );
-          }
-        },
-      );
+      userProvider = Provider.of<UserProvider>(this.context, listen: false);
+      userProvider.refreshUser();
+
+      UserServices.setUserState(
+          userId: userProvider.getUser.id, userStates: UserStates.Online);
     });
 
     WidgetsBinding.instance.addObserver(this);
@@ -48,21 +44,13 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    String currentUserId;
-    BlocBuilder<UserBloc, UserState>(
-      builder: (context, userState) {
-        if (userState is UserLoaded) {
-          currentUserId = userState.user.id;
-          return null;
-        } else {
-          return null;
-        }
-      },
-    );
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    String currentUserId =
+        (userProvider != null && userProvider.getUser.id != null)
+            ? userProvider.getUser.id
+            : "";
 
     super.didChangeAppLifecycleState(state);
-
     switch (state) {
       case AppLifecycleState.resumed:
         currentUserId != null
@@ -107,6 +95,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                 body: BlocBuilder<UserBloc, UserState>(
                   builder: (context, userState) {
                     if (userState is UserLoaded) {
+                      // jika ada file profile gambar yang mau di upload dari page registrasi
+                      if (imageFileToUpload != null) {
+                        uploadImage(imageFileToUpload).then((downloadUrl) {
+                          imageFileToUpload = null;
+                          context
+                              .bloc<UserBloc>()
+                              .add(UpdateUserData(profileImage: downloadUrl));
+                        });
+                      }
                       return Stack(
                         children: [
                           Container(
@@ -177,77 +174,88 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
               );
             } else {
               // if user adalah dokter
-              return Scaffold(
-                backgroundColor: Colors.white,
-                body: BlocBuilder<UserBloc, UserState>(
-                  builder: (context, userState) {
-                    if (userState is UserLoaded) {
-                      return Stack(
-                        children: [
-                          Container(
-                            color: mainColor,
+              return PickupLayout(
+                scaffold: Scaffold(
+                  backgroundColor: Colors.white,
+                  body: BlocBuilder<UserBloc, UserState>(
+                    builder: (context, userState) {
+                      if (userState is UserLoaded) {
+                        // jika ada file profile gambar yang mau di upload dari page registrasi
+                        if (imageFileToUpload != null) {
+                          uploadImage(imageFileToUpload).then((downloadUrl) {
+                            imageFileToUpload = null;
+                            context
+                                .bloc<UserBloc>()
+                                .add(UpdateUserData(profileImage: downloadUrl));
+                          });
+                        }
+                        return Stack(
+                          children: [
+                            Container(
+                              color: mainColor,
+                            ),
+                            SafeArea(child: Container(color: mainColor)),
+                            PageView(
+                              controller: pageController,
+                              physics: NeverScrollableScrollPhysics(),
+                              onPageChanged: (index) {
+                                setState(() {
+                                  bottomNavbarIndex = index;
+                                });
+                              },
+                              children: [
+                                // DoctorPage(DoctorType()),
+                                ChatListScreen(),
+                                // HospitalPage(),
+                                UserProfilePageMenu(),
+                              ],
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
+                  bottomNavigationBar: BottomNavyBar(
+                    showElevation: true,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    iconSize: 32,
+                    selectedIndex: bottomNavbarIndex,
+                    onItemSelected: (index) {
+                      setState(() => bottomNavbarIndex = index);
+                      pageController.jumpToPage(index);
+                    },
+                    items: <BottomNavyBarItem>[
+                      // BottomNavyBarItem(
+                      //     activeColor: mainColor,
+                      //     inactiveColor: accentColor7,
+                      //     icon: Icon(
+                      //       Icons.perm_contact_calendar,
+                      //       // size: 28,
+                      //       // color: accentColor2,
+                      //     ),
+                      //     title: Text("Homepage")),
+                      BottomNavyBarItem(
+                          activeColor: mainColor,
+                          inactiveColor: accentColor7,
+                          icon: Icon(
+                            Icons.chat,
+                            // size: 28,
+                            // color: accentColor2,
                           ),
-                          SafeArea(child: Container(color: mainColor)),
-                          PageView(
-                            controller: pageController,
-                            physics: NeverScrollableScrollPhysics(),
-                            onPageChanged: (index) {
-                              setState(() {
-                                bottomNavbarIndex = index;
-                              });
-                            },
-                            children: [
-                              // DoctorPage(DoctorType()),
-                              ChatListScreen(),
-                              // HospitalPage(),
-                              UserProfilePageMenu(),
-                            ],
+                          title: Text("Messages")),
+                      BottomNavyBarItem(
+                          activeColor: mainColor,
+                          inactiveColor: accentColor7,
+                          icon: Icon(
+                            Icons.person_pin,
+                            // size: 28,
+                            // color: accentColor2,
                           ),
-                        ],
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                bottomNavigationBar: BottomNavyBar(
-                  showElevation: true,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  iconSize: 32,
-                  selectedIndex: bottomNavbarIndex,
-                  onItemSelected: (index) {
-                    setState(() => bottomNavbarIndex = index);
-                    pageController.jumpToPage(index);
-                  },
-                  items: <BottomNavyBarItem>[
-                    // BottomNavyBarItem(
-                    //     activeColor: mainColor,
-                    //     inactiveColor: accentColor7,
-                    //     icon: Icon(
-                    //       Icons.perm_contact_calendar,
-                    //       // size: 28,
-                    //       // color: accentColor2,
-                    //     ),
-                    //     title: Text("Homepage")),
-                    BottomNavyBarItem(
-                        activeColor: mainColor,
-                        inactiveColor: accentColor7,
-                        icon: Icon(
-                          Icons.chat,
-                          // size: 28,
-                          // color: accentColor2,
-                        ),
-                        title: Text("Messages")),
-                    BottomNavyBarItem(
-                        activeColor: mainColor,
-                        inactiveColor: accentColor7,
-                        icon: Icon(
-                          Icons.person_pin,
-                          // size: 28,
-                          // color: accentColor2,
-                        ),
-                        title: Text("Profile")),
-                  ],
+                          title: Text("Profile")),
+                    ],
+                  ),
                 ),
               );
             }

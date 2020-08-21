@@ -62,6 +62,11 @@ class UserProfilePageMenu extends StatelessWidget {
                                                   "images/user_default.png"),
                                           fit: BoxFit.cover)),
                                 ),
+                                Positioned(
+                                    bottom: 0,
+                                    left: 130,
+                                    child: OnlineDotIndicator(
+                                        uid: userState.user.id))
                               ],
                             ),
                           ),

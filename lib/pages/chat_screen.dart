@@ -306,6 +306,7 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
     final String receiverName = widget.receiver.fullName;
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     return Container(
+      // color: Colors.red,
       decoration: BoxDecoration(color: Colors.white, boxShadow: [
         BoxShadow(
           color: Colors.grey,
@@ -313,130 +314,132 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
           blurRadius: 3.0,
         ),
       ]),
-      margin: EdgeInsets.only(top: 10, bottom: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              maxLines: 5,
-              minLines: 1,
-              controller: textChatController,
-              style: blackTextFont,
-              onChanged: (val) {
-                (val.length > 0 && val.trim() != "")
-                    ? setWritingTo(true)
-                    : setWritingTo(false);
-              },
-              decoration: InputDecoration(
-                hintText: (widget.receiver.job == "Doctor")
-                    ? "Tulis pesan untuk dr.$receiverName ..."
-                    : "Tulis pesan untuk $receiverName ...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 2, right: 8, top: 2),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                maxLines: 5,
+                minLines: 1,
+                controller: textChatController,
+                style: blackTextFont,
+                onChanged: (val) {
+                  (val.length > 0 && val.trim() != "")
+                      ? setWritingTo(true)
+                      : setWritingTo(false);
+                },
+                decoration: InputDecoration(
+                  hintText: (widget.receiver.job == "Doctor")
+                      ? "Tulis pesan untuk dr.$receiverName ..."
+                      : "Tulis pesan untuk $receiverName ...",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
                   ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               ),
             ),
-          ),
-          // *image button
-          (isWriting)
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.all(0),
-                  width: 32,
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.image,
-                        size: 28,
-                        color: mainColor,
-                      ),
-                      onPressed: () async {
-                        File selectedImage = await getImage();
-                        uploadImageMessage(
-                            image: selectedImage,
-                            receiver: widget.receiver,
-                            sender: widget.sender,
-                            imageUploadProvider: _imageUploadProvider);
-                      })),
-          // *camera button
-          (isWriting)
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.all(0),
-                  width: 32,
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.camera_alt,
-                        size: 28,
-                        color: mainColor,
-                      ),
-                      onPressed: () async {
-                        File selectedImage = await getImageCamera();
-                        uploadImageMessage(
-                            image: selectedImage,
-                            receiver: widget.receiver,
-                            sender: widget.sender,
-                            imageUploadProvider: _imageUploadProvider);
-                      })),
-          // *vidcall button
-          (isWriting)
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.all(0),
-                  width: 38,
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.video_call,
-                        size: 32,
-                        color: mainColor,
-                      ),
-                      onPressed: () async {
-                        print("Masuk sini");
-                        bool getPermission = await Permissions
-                            .cameraAndMicrophonePermissionsGranted();
-                        if (getPermission) {
-                          print("Masuk sini lagi");
-                          CallUtils.dial(
-                            context: context,
-                            userCaller: widget.sender,
-                            userReceiver: widget.receiver,
-                          );
-                          bool hasCallMade = CallUtils.hasCallMade;
-                          if (hasCallMade) {
-                            Call call = CallUtils.call;
-                            context
-                                .bloc<PageBloc>()
-                                .add(GoToCallScreenPage(call: call));
-                          }
-                        } else {}
-                      }),
-                ),
-          // *send button
-          (isWriting)
-              ? Container(
-                  width: 38,
-                  margin: EdgeInsets.only(left: 10),
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: mainColor),
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.send,
-                        size: 18,
-                        color: accentColor2,
-                      ),
-                      onPressed: () {
-                        sendMessage();
-                      }),
-                )
-              : Container(),
-          SizedBox(
-            width: 8,
-          )
-        ],
+            // *image button
+            (isWriting)
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.all(0),
+                    width: 32,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          size: 28,
+                          color: mainColor,
+                        ),
+                        onPressed: () async {
+                          File selectedImage = await getImage();
+                          uploadImageMessage(
+                              image: selectedImage,
+                              receiver: widget.receiver,
+                              sender: widget.sender,
+                              imageUploadProvider: _imageUploadProvider);
+                        })),
+            // *camera button
+            (isWriting)
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.all(0),
+                    width: 32,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.camera_alt,
+                          size: 28,
+                          color: mainColor,
+                        ),
+                        onPressed: () async {
+                          File selectedImage = await getImageCamera();
+                          uploadImageMessage(
+                              image: selectedImage,
+                              receiver: widget.receiver,
+                              sender: widget.sender,
+                              imageUploadProvider: _imageUploadProvider);
+                        })),
+            // *vidcall button
+            (isWriting)
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.all(0),
+                    width: 38,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.video_call,
+                          size: 32,
+                          color: mainColor,
+                        ),
+                        onPressed: () async {
+                          print("Masuk sini");
+                          bool getPermission = await Permissions
+                              .cameraAndMicrophonePermissionsGranted();
+                          if (getPermission) {
+                            print("Masuk sini lagi");
+                            CallUtils.dial(
+                              context: context,
+                              userCaller: widget.sender,
+                              userReceiver: widget.receiver,
+                            );
+                            bool hasCallMade = CallUtils.hasCallMade;
+                            if (hasCallMade) {
+                              Call call = CallUtils.call;
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToCallScreenPage(call: call));
+                            }
+                          } else {}
+                        }),
+                  ),
+            // *send button
+            (isWriting)
+                ? Container(
+                    width: 38,
+                    margin: EdgeInsets.only(left: 10),
+                    decoration:
+                        BoxDecoration(shape: BoxShape.circle, color: mainColor),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.send,
+                          size: 18,
+                          color: accentColor2,
+                        ),
+                        onPressed: () {
+                          sendMessage();
+                        }),
+                  )
+                : Container(),
+            SizedBox(
+              width: 8,
+            )
+          ],
+        ),
       ),
     );
   }

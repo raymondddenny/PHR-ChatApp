@@ -28,9 +28,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => ThemeBloc())
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, themeState) =>
-              ChangeNotifierProvider<ImageUploadProvider>(
-            create: (context) => ImageUploadProvider(),
+          builder: (context, themeState) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => ImageUploadProvider()),
+              ChangeNotifierProvider(create: (_) => UserProvider()),
+            ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: themeState.themeData,

@@ -4,18 +4,20 @@ class ChatListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "Messages",
-                style: blackTextFont.copyWith(
-                  fontSize: 28,
-                ),
+        child: PickupLayout(
+      scaffold: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Messages",
+              style: blackTextFont.copyWith(
+                fontSize: 28,
               ),
-              backgroundColor: Colors.white,
-              elevation: 0,
             ),
-            body: ChatListScreenContainer()));
+            backgroundColor: Colors.white,
+            elevation: 0,
+          ),
+          body: ChatListScreenContainer()),
+    ));
   }
 }
 

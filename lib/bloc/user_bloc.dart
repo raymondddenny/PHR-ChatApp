@@ -23,7 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is UserLoad) {
       User user = await UserServices.getUser(event.id);
       List<User> userList = await UserServices.getAllUser();
-      yield UserLoaded(user, userList: userList);
+      yield UserLoaded(user, userList);
     } else if (event is UserSignOut) {
       yield UserInitial();
     } else if (event is UpdateUserData) {
@@ -35,8 +35,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       // update user in database
       await UserServices.updateUser(updatedUser);
+      List<User> userList = await UserServices.getAllUser();
 
-      yield UserLoaded(updatedUser);
+      yield UserLoaded(updatedUser, userList);
+    } else if (event is UpdateUserState) {
+      User updateUser = (state as UserLoaded).user.copyWith(state: event.state);
+
+      // update userstate
+      await UserServices.updateUser(updateUser);
     }
   }
 }

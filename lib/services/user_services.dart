@@ -14,36 +14,35 @@ class UserServices {
       'job': user.job,
       'profileImage': user.profileImage ?? "no_pic",
       'noSIP': user.noSIP ?? "",
-      'status': user.status ?? ""
+      'status': user.status ?? "",
+      'state': user.state ?? 1
     });
   }
 
-  // static Future<FirebaseUser> getCurrentUser() async {
-  //   FirebaseUser currentUser;
-  //   currentUser = await AuthServices._auth.currentUser();
-  //   return currentUser;
-  // }
+  static Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser currentUser;
+    currentUser = await AuthServices._auth.currentUser();
+    return currentUser;
+  }
 
-  // static Future<User> getUserDetails() async {
-  //   FirebaseUser currentUser = await getCurrentUser();
-  //   DocumentSnapshot documentSnapshot =
-  //       await _userCollection.document(currentUser.uid).get();
-  //   return User.fromMap(documentSnapshot.data);
-  // }
+  static Future<User> getUserDetails() async {
+    FirebaseUser currentUser = await getCurrentUser();
+    DocumentSnapshot documentSnapshot =
+        await _userCollection.document(currentUser.uid).get();
+    return User.fromMap(documentSnapshot.data);
+  }
 
   // check and get user from firestore
   static Future<User> getUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.document(id).get();
 
-    return User(
-      id,
-      snapshot.data['email'],
-      fullName: snapshot.data['fullName'],
-      profileImage: snapshot.data['profileImage'],
-      job: snapshot.data['job'],
-      noSIP: snapshot.data['noSIP'],
-      status: snapshot.data['status'],
-    );
+    return User(id, snapshot.data['email'],
+        fullName: snapshot.data['fullName'],
+        profileImage: snapshot.data['profileImage'],
+        job: snapshot.data['job'],
+        noSIP: snapshot.data['noSIP'],
+        status: snapshot.data['status'],
+        state: snapshot.data['state']);
   }
 
   static Future<List<User>> getAllUser() async {
@@ -64,12 +63,12 @@ class UserServices {
   //   return userList;
   // }
 
-  static void setUserState(
-      {@required String userId, @required UserStates userStates}) {
+  static Future<void> setUserState(
+      {@required String userId, @required UserStates userStates}) async {
     int stateNum = CallUtils.stateToNum(userStates);
 
-    _userCollection.document(userId).updateData({
-      "state": stateNum,
+    await _userCollection.document(userId).updateData({
+      'state': stateNum,
     });
   }
 

@@ -14,8 +14,8 @@ class UserLoaded extends UserState {
   // user disini untuk menyimpan data user
   final User user;
   final List<User> userList;
-  UserLoaded(this.user, {this.userList});
+  UserLoaded(this.user, this.userList);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, userList];
 }

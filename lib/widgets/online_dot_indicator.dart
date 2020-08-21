@@ -28,10 +28,10 @@ class OnlineDotIndicator extends StatelessWidget {
     switch (CallUtils.numToState(state)) {
       case UserStates.Offline:
         return Colors.red;
-        break;
+
       case UserStates.Online:
         return Colors.green;
-        break;
+
       default:
         return Colors.orange;
     }

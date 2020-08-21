@@ -21,7 +21,9 @@ class User extends Equatable {
       this.status});
 
   // copy user property dengan yang bisa diubah
-  User copyWith({String fullName, String job, String profileImage}) => User(
+  User copyWith(
+          {String fullName, String job, String profileImage, int state}) =>
+      User(
         this.id,
         this.email,
         fullName: fullName ?? this.fullName,

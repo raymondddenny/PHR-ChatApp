@@ -1,14 +1,18 @@
 part of 'extensions.dart';
 
 extension FirebaseUserExtension on FirebaseUser {
-  User convertToUser({
-    String fullName = "No Name",
-    String job = "No Job",
-    String noSIP = "No NoSIP",
-    String status = "",
-  }) =>
+  User convertToUser(
+          {String fullName = "No Name",
+          String job = "No Job",
+          String noSIP = "No NoSIP",
+          String status = "",
+          int state = 0}) =>
       User(this.uid, this.email,
-          fullName: fullName, job: job, noSIP: noSIP, status: status);
+          fullName: fullName,
+          job: job,
+          noSIP: noSIP,
+          status: status,
+          state: state);
 
   // Doctor convertToDoctor(
   //         {String doctorName = "No Name",

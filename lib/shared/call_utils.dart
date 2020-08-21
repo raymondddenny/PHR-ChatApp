@@ -32,10 +32,10 @@ class CallUtils {
     switch (userState) {
       case UserStates.Offline:
         return 0;
-        break;
+
       case UserStates.Online:
         return 1;
-        break;
+
       default:
         return 2;
     }
@@ -45,10 +45,10 @@ class CallUtils {
     switch (number) {
       case 0:
         return UserStates.Offline;
-        break;
+
       case 1:
         return UserStates.Online;
-        break;
+
       default:
         return UserStates.Waiting;
     }

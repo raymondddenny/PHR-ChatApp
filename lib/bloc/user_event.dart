@@ -29,3 +29,11 @@ class UpdateUserData extends UserEvent {
   @override
   List<Object> get props => [fullName, job, profileImage];
 }
+
+class UpdateUserState extends UserEvent {
+  final int state;
+
+  UpdateUserState({this.state});
+  @override
+  List<Object> get props => [state];
+}

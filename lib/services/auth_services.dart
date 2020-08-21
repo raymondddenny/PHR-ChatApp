@@ -12,6 +12,7 @@ class AuthServices {
     String emailAdress,
     String password,
     String noSIP,
+    int state,
     String status,
   }) async {
     try {
@@ -22,7 +23,11 @@ class AuthServices {
 
       // convert firebase user ke user
       User user = result.user.convertToUser(
-          fullName: fullName, job: job, noSIP: noSIP, status: status);
+          fullName: fullName,
+          job: job,
+          noSIP: noSIP,
+          status: status,
+          state: state);
 
       // to store data to Firebase
       await UserServices.updateUser(user);
