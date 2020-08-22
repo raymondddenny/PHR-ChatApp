@@ -188,12 +188,16 @@ class _DoctorPageState extends State<DoctorPage> {
                         fontSize: 24,
                       ),
                     ),
-                    // TODO : Tambah Top Rate Doctor
-                    TopRateDoctorListTile(),
-                    TopRateDoctorListTile(),
-                    TopRateDoctorListTile(),
                     TopRateDoctorListTile(),
                     SizedBox(height: 20),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
                       "Good News",
                       style: blackTextFont.copyWith(
@@ -238,29 +242,155 @@ class GoodNewsListTile extends StatelessWidget {
   }
 }
 
-class TopRateDoctorListTile extends StatelessWidget {
-  const TopRateDoctorListTile({
-    Key key,
-  }) : super(key: key);
+class TopRateDoctorListTile extends StatefulWidget {
+  @override
+  _TopRateDoctorListTileState createState() => _TopRateDoctorListTileState();
+}
 
+class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
+  List<User> userList;
+  int counter = 0;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 5),
-      leading: Image.asset("images/doctor.png"),
-      title: Text("Alexa Rachel"),
-      subtitle: Text("Pediatrician"),
-      trailing: RatingBar(
-        initialRating: 5,
-        direction: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, _) => Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-        itemSize: 28,
-        onRatingUpdate: null,
-      ),
+    String doctorStatus = "Doctor";
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, userState) {
+        if (userState is UserLoaded) {
+          userList = userState.userList;
+          for (int i = 0; i < userList.length; i++) {
+            if (userList[i].status == doctorStatus) {
+              counter++;
+            } else {
+              counter += 0;
+            }
+            if (counter > 0) {
+              return Container(
+                  height: 250,
+                  width: 400,
+                  child: buildListDoctor(doctorStatus));
+            }
+          }
+          return CircularProgressIndicator();
+        } else {
+          return SpinKitFadingCircle(
+            size: 50,
+            color: accentColor2,
+          );
+        }
+      },
     );
   }
+
+  Widget buildListDoctor(String doctorStatus) {
+    final List<User> doctorList = doctorStatus.isEmpty
+        ? []
+        : userList.where((User user) {
+            String _doctorQuery = doctorStatus;
+            String _getUserStatus = user.status;
+            bool matchStatus = _getUserStatus.contains(_doctorQuery);
+            return matchStatus;
+          }).toList();
+
+    return ListView.builder(
+        itemCount: doctorList.length,
+        itemBuilder: (context, index) {
+          User doctor = User(
+            doctorList[index].id,
+            doctorList[index].email,
+            fullName: doctorList[index].fullName,
+            status: doctorList[index].status,
+            profileImage: doctorList[index].profileImage,
+            ratingNum: doctorList[index].ratingNum,
+            job: doctorList[index].job,
+          );
+          return Container(
+            child: CustomChatTile(
+                mini: false,
+                leading: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(doctor.profileImage),
+                ),
+                title: Text(
+                  "dr.${doctor.fullName}",
+                  style: blackTextFont.copyWith(
+                      fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text(
+                  doctor.job,
+                  style: greyTextFont,
+                ),
+                trailing: RatingBar.readOnly(
+                  maxRating: 5,
+                  isHalfAllowed: true,
+                  initialRating: doctor.ratingNum,
+                  halfFilledIcon: Icons.star_half,
+                  filledIcon: Icons.star,
+                  emptyIcon: Icons.star_border,
+                  size: 28,
+                  filledColor: Colors.yellow,
+                ),
+                onTap: () {}),
+          );
+        });
+  }
 }
+
+// ListTile(
+//         //   contentPadding: EdgeInsets.symmetric(horizontal: 5),
+//         //   leading: Image.network("${doctor.profileImage}"),
+//         //   title: Text("${doctor.fullName}"),
+//         //   subtitle: Text("${doctor.job}"),
+// trailing: RatingBar(
+//   allowHalfRating: true,
+//   initialRating: doctor.ratingNum,
+//   direction: Axis.horizontal,
+//   itemCount: 5,
+//   itemBuilder: (context, _) => Icon(
+//     Icons.star,
+//     color: Colors.amber,
+//   ),
+//   itemSize: 28,
+//   onRatingUpdate: null,
+// ),
+//         // );
+
+// return Container(
+//                 height: 200,
+//                 width: 400,
+//                 padding: EdgeInsets.only(),
+//                 child: ListView(
+//                   children: [
+//                     CustomChatTile(
+//                         mini: false,
+//                         leading: CircleAvatar(
+//                           radius: 30,
+//                           backgroundImage:
+//                               NetworkImage(userList[i].profileImage),
+//                         ),
+//                         title: Text(
+//                           userList[i].fullName,
+//                           style: blackTextFont.copyWith(
+//                               fontSize: 18, fontWeight: FontWeight.w600),
+//                         ),
+//                         subtitle: Text(
+//                           userList[i].job,
+//                           style: greyTextFont,
+//                         ),
+//                         trailing: RatingBar(
+//                           allowHalfRating: true,
+//                           ignoreGestures: true,
+//                           tapOnlyMode: true,
+//                           initialRating: userList[i].ratingNum,
+//                           direction: Axis.horizontal,
+//                           itemCount: 5,
+//                           itemBuilder: (context, _) => Icon(
+//                             Icons.star,
+//                             color: Colors.amber,
+//                           ),
+//                           itemSize: 28,
+//                           onRatingUpdate: null,
+//                         ),
+//                         onTap: () {}),
+//                   ],
+//                 ),
+//               );

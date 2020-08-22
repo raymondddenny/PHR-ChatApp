@@ -105,17 +105,26 @@ class UserProfilePageMenu extends StatelessWidget {
                           )),
                     ),
                     DashDividerUserProfileMenu(),
-                    UserProfileMenuListTileMenu(
-                        userProfileMenuTitle: "Sign Out",
-                        onTap: () {
-                          context.bloc<UserBloc>().add(UserSignOut());
-                          AuthServices.signOut();
-                          context.bloc<PageBloc>().add(GoToWelcomePage());
-                        },
-                        leadingIcon: Icon(
-                          Icons.exit_to_app,
-                          color: accentColor2,
-                        )),
+                    BlocBuilder<UserBloc, UserState>(builder: (_, userState) {
+                      if (userState is UserLoaded) {
+                        return UserProfileMenuListTileMenu(
+                            userProfileMenuTitle: "Sign Out",
+                            onTap: () async {
+                              await UserServices.setUserState(
+                                  userId: userState.user.id,
+                                  userStates: UserStates.Offline);
+                              context.bloc<UserBloc>().add(UserSignOut());
+                              AuthServices.signOut();
+                              context.bloc<PageBloc>().add(GoToWelcomePage());
+                            },
+                            leadingIcon: Icon(
+                              Icons.exit_to_app,
+                              color: accentColor2,
+                            ));
+                      } else {
+                        return SizedBox();
+                      }
+                    }),
                     DashDivider(),
                   ],
                 )

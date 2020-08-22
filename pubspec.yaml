@@ -35,7 +35,6 @@ dependencies:
   curved_navigation_bar: ^0.3.3
   image_picker: ^0.6.7+2
   firebase_storage: ^3.1.6
-  flutter_rating_bar: ^3.0.1+1
   material_design_icons_flutter: ^4.0.5345
   flutter_bloc: ^6.0.1
   intl: ^0.16.1
@@ -51,6 +50,8 @@ dependencies:
   google_nav_bar: ^2.2.0
   bottom_navy_bar: ^5.5.0
   lottie: ^0.5.1
+  rating_dialog: ^1.0.0
+  rating_bar: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -67,4 +68,3 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-

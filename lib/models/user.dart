@@ -11,6 +11,7 @@ class User extends Equatable {
   final int state;
   // status = patient atau doctor
   final String status;
+  final double ratingNum;
 
   User(this.id, this.email,
       {this.fullName,
@@ -18,11 +19,16 @@ class User extends Equatable {
       this.job,
       this.state,
       this.noSIP,
+      this.ratingNum,
       this.status});
 
   // copy user property dengan yang bisa diubah
   User copyWith(
-          {String fullName, String job, String profileImage, int state}) =>
+          {String fullName,
+          String job,
+          String profileImage,
+          int state,
+          double ratingNum}) =>
       User(
         this.id,
         this.email,
@@ -30,6 +36,7 @@ class User extends Equatable {
         job: job ?? this.job,
         profileImage: profileImage ?? this.profileImage,
         state: state ?? this.state,
+        ratingNum: ratingNum ?? this.ratingNum,
         noSIP: noSIP ?? this.noSIP,
         status: status ?? this.status,
       );
@@ -42,6 +49,7 @@ class User extends Equatable {
         job,
         profileImage,
         state,
+        ratingNum,
         noSIP,
         status,
       ];
@@ -53,6 +61,7 @@ class User extends Equatable {
         noSIP: mapData['noSIP'],
         profileImage: mapData['profileImage'],
         state: mapData['state'],
+        ratingNum: mapData['ratingNum'],
         status: mapData['status']);
   }
 }

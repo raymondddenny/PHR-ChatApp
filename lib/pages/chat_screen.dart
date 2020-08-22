@@ -22,63 +22,65 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
       context.bloc<PageBloc>().add(GoToMainPage(bottomNavBarIndex: 1));
       return;
     }, child: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
-      return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: AppBar(
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                context.bloc<PageBloc>().add(GoToMainPage());
-              },
-            ),
-            title: Column(
-              children: [
-                Text(widget.receiver.fullName,
-                    style: whiteTextFont.copyWith(fontSize: 18)),
-                Text(
-                  widget.receiver.job,
-                  style: greyTextFont.copyWith(fontSize: 14),
-                ),
-              ],
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8, right: 8),
-                child: Container(
-                  width: 48,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      widget.receiver.profileImage,
+      return PickupLayout(
+        scaffold: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: AppBar(
+              centerTitle: true,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.bloc<PageBloc>().add(GoToMainPage());
+                },
+              ),
+              title: Column(
+                children: [
+                  Text(widget.receiver.fullName,
+                      style: whiteTextFont.copyWith(fontSize: 18)),
+                  Text(
+                    widget.receiver.job,
+                    style: greyTextFont.copyWith(fontSize: 14),
+                  ),
+                ],
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, right: 8),
+                  child: Container(
+                    width: 48,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        widget.receiver.profileImage,
+                      ),
                     ),
                   ),
                 ),
+              ],
+            ),
+          ),
+          body: Column(
+            children: [
+              Flexible(
+                  child: ChatMessageScreen(
+                receiver: widget.receiver,
+                sender: widget.sender,
+              )),
+              _imageUploadProvider.getViewState == ViewState.LOADING
+                  ? Container(
+                      alignment: Alignment.centerRight,
+                      margin: EdgeInsets.only(right: 20),
+                      child: CircularProgressIndicator(
+                        backgroundColor: accentColor2,
+                      ),
+                    )
+                  : Container(),
+              ChatBottomControl(
+                receiver: widget.receiver,
+                sender: widget.sender,
               ),
             ],
           ),
-        ),
-        body: Column(
-          children: [
-            Flexible(
-                child: ChatMessageScreen(
-              receiver: widget.receiver,
-              sender: widget.sender,
-            )),
-            _imageUploadProvider.getViewState == ViewState.LOADING
-                ? Container(
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.only(right: 20),
-                    child: CircularProgressIndicator(
-                      backgroundColor: accentColor2,
-                    ),
-                  )
-                : Container(),
-            ChatBottomControl(
-              receiver: widget.receiver,
-              sender: widget.sender,
-            ),
-          ],
         ),
       );
     }));
@@ -292,6 +294,8 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
   TextEditingController textChatController = TextEditingController();
 
   bool isWriting = false;
+  bool isStop = true;
+  int counter = 0;
 
   setWritingTo(bool val) {
     setState(() {
@@ -397,11 +401,9 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                           color: mainColor,
                         ),
                         onPressed: () async {
-                          print("Masuk sini");
                           bool getPermission = await Permissions
                               .cameraAndMicrophonePermissionsGranted();
                           if (getPermission) {
-                            print("Masuk sini lagi");
                             CallUtils.dial(
                               context: context,
                               userCaller: widget.sender,

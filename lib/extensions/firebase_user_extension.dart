@@ -6,13 +6,15 @@ extension FirebaseUserExtension on FirebaseUser {
           String job = "No Job",
           String noSIP = "No NoSIP",
           String status = "",
-          int state = 0}) =>
+          int state = 1,
+          double ratingNum = 0.0}) =>
       User(this.uid, this.email,
           fullName: fullName,
           job: job,
           noSIP: noSIP,
           status: status,
-          state: state);
+          state: state,
+          ratingNum: ratingNum);
 
   // Doctor convertToDoctor(
   //         {String doctorName = "No Name",

@@ -15,7 +15,8 @@ class UserServices {
       'profileImage': user.profileImage ?? "no_pic",
       'noSIP': user.noSIP ?? "",
       'status': user.status ?? "",
-      'state': user.state ?? 1
+      'state': user.state ?? 0,
+      'ratingNum': user.ratingNum ?? 0,
     });
   }
 
@@ -42,6 +43,7 @@ class UserServices {
         job: snapshot.data['job'],
         noSIP: snapshot.data['noSIP'],
         status: snapshot.data['status'],
+        ratingNum: snapshot.data['ratingNum'],
         state: snapshot.data['state']);
   }
 
@@ -72,6 +74,29 @@ class UserServices {
     });
   }
 
+  // for rating
+  static Future<void> setDoctorRating(
+      String userId, double newRatingNum) async {
+    DocumentSnapshot snapshot = await _userCollection.document(userId).get();
+    double ratingNum = snapshot.data['ratingNum'];
+    ratingNum = ((ratingNum + newRatingNum) / 2);
+    // ratingNum = newRatingNum;
+
+    await _userCollection.document(userId).updateData({
+      'ratingNum': ratingNum,
+    });
+  }
+
+// TODO : Fetch last rating doctor
   static Stream<DocumentSnapshot> getUserStream({@required String uid}) =>
       _userCollection.document(uid).snapshots();
+
+  static Stream<QuerySnapshot> fetchLastRatingDoctor({
+    @required String doctorId,
+  }) {
+    return _userCollection
+        .document(doctorId)
+        .collection("ratingNum")
+        .snapshots();
+  }
 }

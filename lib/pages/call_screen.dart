@@ -175,6 +175,26 @@ class _CallScreenState extends State<CallScreen> {
             child: Column(
           children: <Widget>[_videoView(views[0])],
         ));
+      // case 2:
+      //   return SizedBox(
+      //       child: Stack(
+      //     children: <Widget>[
+      //       _expandedVideoRow([views[1]]),
+      //       Padding(
+      //         padding: const EdgeInsets.fromLTRB(0, 28, 16, 0),
+      //         child: Align(
+      //             alignment: Alignment.topRight,
+      //             child: Container(
+      //                 height: 200,
+      //                 width: 100,
+      //                 child: Container(
+      //                     decoration: BoxDecoration(
+      //                       borderRadius: BorderRadius.circular(12),
+      //                     ),
+      //                     child: _expandedVideoRow([views[0]])))),
+      //       )
+      //     ],
+      //   ));
       case 2:
         return Container(
             child: Column(
@@ -183,76 +203,76 @@ class _CallScreenState extends State<CallScreen> {
             _expandedVideoRow([views[1]])
           ],
         ));
-      case 3:
-        return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 3))
-          ],
-        ));
-      case 4:
-        return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 4))
-          ],
-        ));
+      // case 3:
+      //   return Container(
+      //       child: Column(
+      //     children: <Widget>[
+      //       _expandedVideoRow(views.sublist(0, 2)),
+      //       _expandedVideoRow(views.sublist(2, 3))
+      //     ],
+      //   ));
+      // case 4:
+      //   return Container(
+      //       child: Column(
+      //     children: <Widget>[
+      //       _expandedVideoRow(views.sublist(0, 2)),
+      //       _expandedVideoRow(views.sublist(2, 4))
+      //     ],
+      //   ));
       default:
     }
     return Container();
   }
 
   /// Info panel to show logs
-  Widget _panel() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      alignment: Alignment.bottomCenter,
-      child: FractionallySizedBox(
-        heightFactor: 0.5,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 48),
-          child: ListView.builder(
-            reverse: true,
-            itemCount: _infoStrings.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (_infoStrings.isEmpty) {
-                return null;
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3,
-                  horizontal: 10,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 2,
-                          horizontal: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.yellowAccent,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          _infoStrings[index],
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _panel() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 48),
+  //     alignment: Alignment.bottomCenter,
+  //     child: FractionallySizedBox(
+  //       heightFactor: 0.5,
+  //       child: Container(
+  //         padding: const EdgeInsets.symmetric(vertical: 48),
+  //         child: ListView.builder(
+  //           reverse: true,
+  //           itemCount: _infoStrings.length,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             if (_infoStrings.isEmpty) {
+  //               return null;
+  //             }
+  //             return Padding(
+  //               padding: const EdgeInsets.symmetric(
+  //                 vertical: 3,
+  //                 horizontal: 10,
+  //               ),
+  //               child: Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Flexible(
+  //                     child: Container(
+  //                       padding: const EdgeInsets.symmetric(
+  //                         vertical: 2,
+  //                         horizontal: 5,
+  //                       ),
+  //                       decoration: BoxDecoration(
+  //                         color: Colors.yellowAccent,
+  //                         borderRadius: BorderRadius.circular(5),
+  //                       ),
+  //                       child: Text(
+  //                         _infoStrings[index],
+  //                         style: TextStyle(color: Colors.blueGrey),
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _onToggleMute() {
     setState(() {
@@ -266,56 +286,56 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   /// Toolbar layout
-  Widget _toolbar() {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          RawMaterialButton(
-            onPressed: _onToggleMute,
-            child: Icon(
-              muted ? Icons.mic : Icons.mic_off,
-              color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          ),
-          RawMaterialButton(
-            onPressed: () => CallServices.endCall(
-              call: widget.call,
-            ),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 35.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(15.0),
-          ),
-          // TODO : tambah timer selama call, lalu ditampilkan di chat screen berapa lama call after call finish
-          RawMaterialButton(
-            onPressed: _onSwitchCamera,
-            child: Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _toolbar() {
+  //   return Container(
+  //     alignment: Alignment.bottomCenter,
+  //     padding: const EdgeInsets.symmetric(vertical: 48),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         RawMaterialButton(
+  //           onPressed: _onToggleMute,
+  //           child: Icon(
+  //             muted ? Icons.mic : Icons.mic_off,
+  //             color: muted ? Colors.white : Colors.blueAccent,
+  //             size: 20.0,
+  //           ),
+  //           shape: CircleBorder(),
+  //           elevation: 2.0,
+  //           fillColor: muted ? Colors.blueAccent : Colors.white,
+  //           padding: const EdgeInsets.all(12.0),
+  //         ),
+  //         RawMaterialButton(
+  //           onPressed: () => CallServices.endCall(
+  //             call: widget.call,
+  //           ),
+  //           child: Icon(
+  //             Icons.call_end,
+  //             color: Colors.white,
+  //             size: 35.0,
+  //           ),
+  //           shape: CircleBorder(),
+  //           elevation: 2.0,
+  //           fillColor: Colors.redAccent,
+  //           padding: const EdgeInsets.all(15.0),
+  //         ),
+  //         // TODO : tambah timer selama call, lalu ditampilkan di chat screen berapa lama call after call finish
+  //         RawMaterialButton(
+  //           onPressed: _onSwitchCamera,
+  //           child: Icon(
+  //             Icons.switch_camera,
+  //             color: Colors.blueAccent,
+  //             size: 20.0,
+  //           ),
+  //           shape: CircleBorder(),
+  //           elevation: 2.0,
+  //           fillColor: Colors.white,
+  //           padding: const EdgeInsets.all(12.0),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -352,8 +372,150 @@ class _CallScreenState extends State<CallScreen> {
               child: Stack(
                 children: <Widget>[
                   _viewRows(),
-                  _panel(),
-                  _toolbar(),
+                  // _panel(),
+                  // _toolbar(),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RawMaterialButton(
+                          onPressed: _onToggleMute,
+                          child: Icon(
+                            muted ? Icons.mic : Icons.mic_off,
+                            color: muted ? Colors.white : Colors.blueAccent,
+                            size: 20.0,
+                          ),
+                          shape: CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: muted ? Colors.blueAccent : Colors.white,
+                          padding: const EdgeInsets.all(12.0),
+                        ),
+                        RawMaterialButton(
+                          onPressed: () {
+                            if (widget.call.callerStatus == "Patient" &&
+                                widget.call.receiverStatus == "Doctor") {
+                              showDialog<String>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return RatingDialog(
+                                      icon: Image(
+                                        image: NetworkImage(
+                                            "${widget.call.receiverPhoto}"),
+                                        height: 100,
+                                      ), // set your own image/icon widget
+                                      title: "Doctor Rating Consultation",
+                                      description:
+                                          "How was the consultation with dr. ${widget.call.receiverName}",
+                                      submitButton: "SUBMIT",
+                                      // alternativeButton:
+                                      //     "Contact us instead?", // optional
+                                      positiveComment:
+                                          "We are so happy to hear :)", // optional
+                                      negativeComment:
+                                          "We're sad to hear :(", // optional
+                                      accentColor: Colors.red, // optional
+                                      onSubmitPressed: (int rating) async {
+                                        print(
+                                            "onSubmitPressed: rating = $rating");
+                                        await UserServices.setDoctorRating(
+                                            widget.call.receiverId,
+                                            rating.toDouble());
+                                      },
+                                    );
+                                  });
+                              CallServices.endCall(
+                                call: widget.call,
+                              );
+
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToMainPage(bottomNavBarIndex: 1));
+                            } else if (widget.call.callerStatus == "Doctor" &&
+                                widget.call.receiverStatus == "Patient") {
+                              showDialog<String>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return RatingDialog(
+                                      icon: Image(
+                                        image: NetworkImage(
+                                            "${widget.call.callerPhoto}"),
+                                        height: 100,
+                                      ), // set your own image/icon widget
+                                      title: "Doctor Rating Consultation",
+                                      description:
+                                          "How was the consultation with dr. ${widget.call.callerName}",
+                                      submitButton: "SUBMIT",
+                                      // alternativeButton:
+                                      //     "Contact us instead?", // optional
+                                      positiveComment:
+                                          "We are so happy to hear :)", // optional
+                                      negativeComment:
+                                          "We're sad to hear :(", // optional
+                                      accentColor: Colors.red, // optional
+                                      onSubmitPressed: (int rating) async {
+                                        print(
+                                            "onSubmitPressed: rating = $rating");
+                                        await UserServices.setDoctorRating(
+                                            widget.call.callerId,
+                                            rating.toDouble());
+                                      },
+                                    );
+                                  });
+                              CallServices.endCall(
+                                call: widget.call,
+                              );
+
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToMainPage(bottomNavBarIndex: 1));
+                            } else if (widget.call.callerStatus == "Doctor" ||
+                                widget.call.receiverStatus == "Doctor") {
+                              CallServices.endCall(
+                                call: widget.call,
+                              );
+
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToMainPage(bottomNavBarIndex: 1));
+                            } else {
+                              CallServices.endCall(
+                                call: widget.call,
+                              );
+
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToMainPage(bottomNavBarIndex: 1));
+                            }
+                          },
+                          child: Icon(
+                            Icons.call_end,
+                            color: Colors.white,
+                            size: 35.0,
+                          ),
+                          shape: CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: Colors.redAccent,
+                          padding: const EdgeInsets.all(15.0),
+                        ),
+                        RawMaterialButton(
+                          onPressed: _onSwitchCamera,
+                          child: Icon(
+                            Icons.switch_camera,
+                            color: Colors.blueAccent,
+                            size: 20.0,
+                          ),
+                          shape: CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: Colors.white,
+                          padding: const EdgeInsets.all(12.0),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -26,9 +26,9 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     bottomNavbarIndex = widget.bottomNavBarIndex;
     pageController = PageController(initialPage: bottomNavbarIndex);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       userProvider = Provider.of<UserProvider>(this.context, listen: false);
-      userProvider.refreshUser();
+      await userProvider.refreshUser();
 
       UserServices.setUserState(
           userId: userProvider.getUser.id, userStates: UserStates.Online);

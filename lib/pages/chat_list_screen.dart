@@ -29,10 +29,9 @@ class ChatListScreenContainer extends StatelessWidget {
         if (userState is UserLoaded) {
           return Container(
             margin: EdgeInsets.only(
-                left: defaultMargin,
-                right: defaultMargin,
-                top: 12,
-                bottom: defaultMargin),
+              left: defaultMargin,
+              right: defaultMargin,
+            ),
             child: StreamBuilder<QuerySnapshot>(
                 stream:
                     MessageServices.fetchContacts(userId: userState.user.id),

@@ -9,8 +9,10 @@ class CallUtils {
       callerId: userCaller.id,
       callerName: userCaller.fullName,
       callerPhoto: userCaller.profileImage,
+      callerStatus: userCaller.status,
       receiverId: userReceiver.id,
       receiverName: userReceiver.fullName,
+      receiverStatus: userReceiver.status,
       receiverPhoto: userReceiver.profileImage,
       // generate random callRoomId
       callChannedId: randomAlphaNumeric(25),
@@ -20,12 +22,6 @@ class CallUtils {
     hasCallMade = callMade;
 
     call.hasDialled = true;
-
-    // if (callMade) {
-    //   // context.bloc<PageBloc>().add(GoToCallScreenPage(call: call));
-    //   Navigator.push(context,
-    //       MaterialPageRoute(builder: (context) => CallScreen(call: call)));
-    // }
   }
 
   static int stateToNum(UserStates userState) {
@@ -45,10 +41,10 @@ class CallUtils {
     switch (number) {
       case 0:
         return UserStates.Offline;
-
+        break;
       case 1:
         return UserStates.Online;
-
+        break;
       default:
         return UserStates.Waiting;
     }

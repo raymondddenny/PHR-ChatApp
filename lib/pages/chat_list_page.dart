@@ -34,7 +34,6 @@ class _ChatListContainerState extends State<ChatListContainer> {
   @override
   Widget build(BuildContext context) {
     String queryDoctor = widget.doctorSpeciality;
-
     return Container(
       child: BlocBuilder<UserBloc, UserState>(
         builder: (context, userState) {
@@ -49,27 +48,7 @@ class _ChatListContainerState extends State<ChatListContainer> {
                 counter += 0;
               }
             }
-            print(counter);
-            // (counter > 0 == true)
-            //     ? buildSuggestion(queryDoctor, sender)
-            //     : Center(
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             Text(
-            //               "No doctor found \nfor a moment",
-            //               style: blackTextFont.copyWith(fontSize: 28),
-            //               textAlign: TextAlign.center,
-            //             ),
-            //             Container(
-            //                 child: LottieBuilder.network(
-            //               "https://assets4.lottiefiles.com/packages/lf20_wdXBRc.json",
-            //               repeat: true,
-            //               fit: BoxFit.contain,
-            //             )),
-            //           ],
-            //         ),
-            //       );
+
             if (counter > 0) {
               return buildSuggestion(queryDoctor, sender);
             } else {
