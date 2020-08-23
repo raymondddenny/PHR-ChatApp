@@ -287,8 +287,9 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
         : userList.where((User user) {
             String _doctorQuery = doctorStatus;
             String _getUserStatus = user.status;
+            double _rating = user.ratingNum;
             bool matchStatus = _getUserStatus.contains(_doctorQuery);
-            return matchStatus;
+            return (matchStatus && _rating > 3);
           }).toList();
 
     return ListView.builder(

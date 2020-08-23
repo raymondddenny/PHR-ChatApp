@@ -55,6 +55,14 @@ class UserServices {
     }
     return userList;
   }
+  // static Future<List<User>> getAllUser() async {
+  //   List<User> userList = List<User>();
+  //   QuerySnapshot querySnapshot = await _userCollection.getDocuments();
+  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
+  //     userList.add(User.fromMap(querySnapshot.documents[i].data));
+  //   }
+  //   return userList;
+  // }
 
   //   static Future<List<User>> getAllUserDoctor(String job) async {
   //   List<User> userList = List<User>();
@@ -87,10 +95,10 @@ class UserServices {
     });
   }
 
-// TODO : Fetch last rating doctor
   static Stream<DocumentSnapshot> getUserStream({@required String uid}) =>
       _userCollection.document(uid).snapshots();
 
+// TODO : Fetch last rating doctor
   static Stream<QuerySnapshot> fetchLastRatingDoctor({
     @required String doctorId,
   }) {

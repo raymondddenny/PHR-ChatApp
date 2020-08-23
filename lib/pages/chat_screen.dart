@@ -334,7 +334,7 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                       : setWritingTo(false);
                 },
                 decoration: InputDecoration(
-                  hintText: (widget.receiver.job == "Doctor")
+                  hintText: (widget.receiver.status == "Doctor")
                       ? "Tulis pesan untuk dr.$receiverName ..."
                       : "Tulis pesan untuk $receiverName ...",
                   border: OutlineInputBorder(
@@ -454,6 +454,8 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
       message: text,
       timeStamp: Timestamp.now(),
       type: 'text',
+      receiverName: widget.receiver.fullName,
+      senderName: widget.sender.fullName,
     );
 
     // when send message tap
