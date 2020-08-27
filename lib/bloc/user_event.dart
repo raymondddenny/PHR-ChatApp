@@ -23,11 +23,19 @@ class UpdateUserData extends UserEvent {
   final String fullName;
   final String job;
   final String profileImage;
+  final String alumnus;
+  final String tempatPraktek;
 
-  UpdateUserData({this.fullName, this.job, this.profileImage});
+  UpdateUserData(
+      {this.fullName,
+      this.job,
+      this.profileImage,
+      this.alumnus,
+      this.tempatPraktek});
 
   @override
-  List<Object> get props => [fullName, job, profileImage];
+  List<Object> get props =>
+      [fullName, job, profileImage, alumnus, tempatPraktek];
 }
 
 class UpdateUserState extends UserEvent {

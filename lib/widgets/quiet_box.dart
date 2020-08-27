@@ -20,7 +20,7 @@ class QuietBox extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "No Message From Patient Yuet.",
+                              "No Message From Patient Yet.",
                               style: blackTextFont.copyWith(fontSize: 28),
                               textAlign: TextAlign.center,
                             ),

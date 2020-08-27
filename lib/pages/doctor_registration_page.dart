@@ -14,6 +14,8 @@ class _DoctorRegistrationPageState extends State<DoctorRegistrationPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController jobController = TextEditingController();
   TextEditingController noSipController = TextEditingController();
+  TextEditingController alumnusController = TextEditingController();
+  TextEditingController tempatPraktekController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController retypeController = TextEditingController();
 
@@ -24,6 +26,8 @@ class _DoctorRegistrationPageState extends State<DoctorRegistrationPage> {
     emailController.text = widget.registrationUserData.email;
     jobController.text = widget.registrationUserData.job;
     noSipController.text = widget.registrationUserData.noSIP;
+    alumnusController.text = widget.registrationUserData.alumnus;
+    tempatPraktekController.text = widget.registrationUserData.tempatPraktek;
   }
 
   @override
@@ -203,6 +207,42 @@ class _DoctorRegistrationPageState extends State<DoctorRegistrationPage> {
                     height: 16,
                   ),
                   TextField(
+                    style: TextStyle(color: accentColor1),
+                    controller: alumnusController,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: accentColor5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: accentColor1)),
+                        labelText: "Alumnus",
+                        labelStyle: TextStyle(color: accentColor1),
+                        hintText: "Alumnus",
+                        hintStyle: TextStyle(color: accentColor1)),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextField(
+                    style: TextStyle(color: accentColor1),
+                    controller: tempatPraktekController,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: accentColor5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: accentColor1)),
+                        labelText: "Tempat Praktek",
+                        labelStyle: TextStyle(color: accentColor1),
+                        hintText: "Tempat Praktek",
+                        hintStyle: TextStyle(color: accentColor1)),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextField(
                     obscureText: true,
                     style: TextStyle(color: accentColor1),
                     controller: passwordController,
@@ -249,6 +289,8 @@ class _DoctorRegistrationPageState extends State<DoctorRegistrationPage> {
                             emailController.text.trim() == "" &&
                             jobController.text.trim() == "" &&
                             noSipController.text.trim() == "" &&
+                            alumnusController.text.trim() == "" &&
+                            tempatPraktekController.text.trim() == "" &&
                             passwordController.text.trim() == "" &&
                             retypeController.text.trim() == "")) {
                           Flushbar(
@@ -295,6 +337,10 @@ class _DoctorRegistrationPageState extends State<DoctorRegistrationPage> {
                           widget.registrationUserData.job = jobController.text;
                           widget.registrationUserData.noSIP =
                               noSipController.text;
+                          widget.registrationUserData.alumnus =
+                              alumnusController.text;
+                          widget.registrationUserData.tempatPraktek =
+                              tempatPraktekController.text;
                           widget.registrationUserData.password =
                               passwordController.text;
                           widget.registrationUserData.status = "Doctor";

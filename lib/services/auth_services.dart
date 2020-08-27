@@ -13,7 +13,10 @@ class AuthServices {
     String password,
     String noSIP,
     int state,
+    double ratingNum,
     String status,
+    String alumnus,
+    String tempatPraktek,
   }) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
@@ -23,11 +26,15 @@ class AuthServices {
 
       // convert firebase user ke user
       User user = result.user.convertToUser(
-          fullName: fullName,
-          job: job,
-          noSIP: noSIP,
-          status: status,
-          state: state);
+        fullName: fullName,
+        job: job,
+        noSIP: noSIP,
+        status: status,
+        state: state,
+        ratingNum: ratingNum,
+        alumnus: alumnus,
+        tempatPraktek: tempatPraktek,
+      );
 
       // to store data to Firebase
       await UserServices.updateUser(user);

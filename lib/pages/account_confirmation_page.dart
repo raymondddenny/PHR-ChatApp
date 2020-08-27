@@ -42,9 +42,13 @@ class _AccountConfirmationPageState extends State<AccountConfirmationPage> {
                           alignment: Alignment.centerLeft,
                           child: GestureDetector(
                             onTap: () {
-                              context.bloc<PageBloc>().add(
-                                  GoToRegistrationUserPage(
-                                      widget.registrationUserData));
+                              (widget.registrationUserData.status == "Doctor")
+                                  ? context.bloc<PageBloc>().add(
+                                      GoToRegistrationDoctorPage(
+                                          widget.registrationUserData))
+                                  : context.bloc<PageBloc>().add(
+                                      GoToRegistrationUserPage(
+                                          widget.registrationUserData));
                             },
                             child: Icon(Icons.arrow_back_ios,
                                 size: 24, color: Colors.white),
@@ -128,6 +132,9 @@ class _AccountConfirmationPageState extends State<AccountConfirmationPage> {
                                       widget.registrationUserData.password,
                                   noSIP: widget.registrationUserData.noSIP,
                                   status: widget.registrationUserData.status,
+                                  alumnus: widget.registrationUserData.alumnus,
+                                  tempatPraktek:
+                                      widget.registrationUserData.tempatPraktek,
                                 );
 
                                 // check authresult

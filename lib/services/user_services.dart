@@ -15,8 +15,10 @@ class UserServices {
       'profileImage': user.profileImage ?? "no_pic",
       'noSIP': user.noSIP ?? "",
       'status': user.status ?? "",
-      'state': user.state ?? 0,
-      'ratingNum': user.ratingNum ?? 0,
+      'state': user.state ?? 1,
+      'ratingNum': user.ratingNum ?? 0.0,
+      'alumnus': user.alumnus ?? "",
+      'tempatPraktek': user.tempatPraktek ?? "",
     });
   }
 
@@ -37,14 +39,19 @@ class UserServices {
   static Future<User> getUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.document(id).get();
 
-    return User(id, snapshot.data['email'],
-        fullName: snapshot.data['fullName'],
-        profileImage: snapshot.data['profileImage'],
-        job: snapshot.data['job'],
-        noSIP: snapshot.data['noSIP'],
-        status: snapshot.data['status'],
-        ratingNum: snapshot.data['ratingNum'],
-        state: snapshot.data['state']);
+    return User(
+      id,
+      snapshot.data['email'],
+      fullName: snapshot.data['fullName'],
+      profileImage: snapshot.data['profileImage'],
+      job: snapshot.data['job'],
+      noSIP: snapshot.data['noSIP'],
+      status: snapshot.data['status'],
+      ratingNum: snapshot.data['ratingNum'],
+      state: snapshot.data['state'],
+      alumnus: snapshot.data['alumnus'],
+      tempatPraktek: snapshot.data['tempatPraktek'],
+    );
   }
 
   static Future<List<User>> getAllUser() async {
@@ -87,7 +94,7 @@ class UserServices {
       String userId, double newRatingNum) async {
     DocumentSnapshot snapshot = await _userCollection.document(userId).get();
     double ratingNum = snapshot.data['ratingNum'];
-    ratingNum = ((ratingNum + newRatingNum) / 2);
+    ratingNum = (ratingNum + newRatingNum) / 2;
     // ratingNum = newRatingNum;
 
     await _userCollection.document(userId).updateData({
@@ -99,12 +106,22 @@ class UserServices {
       _userCollection.document(uid).snapshots();
 
 // TODO : Fetch last rating doctor
-  static Stream<QuerySnapshot> fetchLastRatingDoctor({
-    @required String doctorId,
-  }) {
-    return _userCollection
-        .document(doctorId)
-        .collection("ratingNum")
-        .snapshots();
+  static Stream<List<User>> fetchLastRatingDoctor() {
+    Stream<QuerySnapshot> stream = _userCollection.snapshots();
+    return stream.map((queryDoctor) => queryDoctor.documents
+        .map((doc) => User(
+              doc.data['id'],
+              doc.data['email'],
+              fullName: doc.data['fullName'],
+              job: doc.data['job'],
+              profileImage: doc.data['profileImage'],
+              noSIP: doc.data['noSIP'],
+              status: doc.data['status'],
+              ratingNum: doc.data['ratingNum'],
+              state: doc.data['state'],
+              alumnus: doc.data['alumnus'],
+              tempatPraktek: doc.data['tempatPraktek'],
+            ))
+        .toList());
   }
 }

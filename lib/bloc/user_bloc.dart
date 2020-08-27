@@ -31,7 +31,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       User updatedUser = (state as UserLoaded).user.copyWith(
           fullName: event.fullName,
           job: event.job,
-          profileImage: event.profileImage);
+          profileImage: event.profileImage,
+          alumnus: event.alumnus,
+          tempatPraktek: event.tempatPraktek);
 
       // update user in database
       await UserServices.updateUser(updatedUser);

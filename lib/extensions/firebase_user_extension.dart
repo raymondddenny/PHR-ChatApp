@@ -7,28 +7,21 @@ extension FirebaseUserExtension on FirebaseUser {
           String noSIP = "No NoSIP",
           String status = "",
           int state = 1,
-          double ratingNum = 0.0}) =>
-      User(this.uid, this.email,
-          fullName: fullName,
-          job: job,
-          noSIP: noSIP,
-          status: status,
-          state: state,
-          ratingNum: ratingNum);
-
-  // Doctor convertToDoctor(
-  //         {String doctorName = "No Name",
-  //         String noSip,
-  //         String speciality,
-  //         int rating = 3}) =>
-  //     Doctor(
-  //       this.uid,
-  //       this.email,
-  //       noSip: noSip,
-  //       doctorName: doctorName,
-  //       rating: rating,
-  //       speciality: speciality,
-  //     );
+          double ratingNum = 0,
+          String alumnus = "",
+          String tempatPraktek = ""}) =>
+      User(
+        this.uid,
+        this.email,
+        fullName: fullName,
+        job: job,
+        noSIP: noSIP,
+        status: status,
+        state: state,
+        ratingNum: ratingNum,
+        alumnus: alumnus,
+        tempatPraktek: tempatPraktek,
+      );
 
   Future<User> fromFireStore() async => await UserServices.getUser(this.uid);
 }

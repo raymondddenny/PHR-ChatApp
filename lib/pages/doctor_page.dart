@@ -189,7 +189,6 @@ class _DoctorPageState extends State<DoctorPage> {
                       ),
                     ),
                     TopRateDoctorListTile(),
-                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -265,9 +264,19 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
             }
             if (counter > 0) {
               return Container(
-                  height: 250,
-                  width: 400,
-                  child: buildListDoctor(doctorStatus));
+                  height: 250, child: buildListDoctor(doctorStatus));
+            } else {
+              return Container(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "...No doctor found for a moment...",
+                    style: blackTextFont.copyWith(
+                        fontSize: 18, color: accentColor2),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
             }
           }
           return CircularProgressIndicator();
@@ -282,39 +291,52 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
   }
 
   Widget buildListDoctor(String doctorStatus) {
-    final List<User> doctorList = doctorStatus.isEmpty
-        ? []
-        : userList.where((User user) {
-            String _doctorQuery = doctorStatus;
-            String _getUserStatus = user.status;
-            double _rating = user.ratingNum;
-            bool matchStatus = _getUserStatus.contains(_doctorQuery);
-            return (matchStatus && _rating > 3);
-          }).toList();
+    // final List<User> doctorList = doctorStatus.isEmpty
+    //     ? []
+    //     : userList.where((User user) {
+    //         String _doctorQuery = doctorStatus;
+    //         String _getUserStatus = user.status;
+    //         double _rating = user.ratingNum;
+    //         bool matchStatus = _getUserStatus.contains(_doctorQuery);
+    //         return (matchStatus && _rating > 3);
+    //       }).toList();
 
-    return ListView.builder(
-        itemCount: doctorList.length,
-        itemBuilder: (context, index) {
-          User doctor = User(
-            doctorList[index].id,
-            doctorList[index].email,
-            fullName: doctorList[index].fullName,
-            status: doctorList[index].status,
-            profileImage: doctorList[index].profileImage,
-            ratingNum: doctorList[index].ratingNum,
-            job: doctorList[index].job,
-          );
-          return Container(
-            child: CustomChatTile(
+    return StreamBuilder(
+      stream: UserServices.fetchLastRatingDoctor(),
+      builder: (context, AsyncSnapshot<List<User>> snapshot) {
+        // final List<User> doctorLists = snapshot.data;
+        final List<User> doctorList = doctorStatus.isEmpty
+            ? []
+            : userList.where((User user) {
+                String _doctorQuery = doctorStatus;
+                String _getUserStatus = user.status;
+                double _rating = user.ratingNum;
+                bool matchStatus = _getUserStatus.contains(_doctorQuery);
+                return (matchStatus && _rating > 3);
+              }).toList();
+        return ListView.builder(
+          itemCount: doctorList.length,
+          itemBuilder: (context, index) {
+            User doctor = User(
+              doctorList[index].id,
+              doctorList[index].email,
+              fullName: doctorList[index].fullName,
+              job: doctorList[index].job,
+              profileImage: doctorList[index].profileImage,
+              ratingNum: doctorList[index].ratingNum,
+            );
+            return Container(
+              child: CustomChatTile(
                 mini: false,
                 leading: CircleAvatar(
                   radius: 30,
                   backgroundImage: NetworkImage(doctor.profileImage),
                 ),
                 title: Text(
-                  "dr.${doctor.fullName}",
+                  doctor.fullName,
                   style: blackTextFont.copyWith(
-                      fontSize: 18, fontWeight: FontWeight.w600),
+                    fontSize: 18,
+                  ),
                 ),
                 subtitle: Text(
                   doctor.job,
@@ -330,9 +352,13 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
                   size: 28,
                   filledColor: Colors.yellow,
                 ),
-                onTap: () {}),
-          );
-        });
+                onTap: () {},
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -395,3 +421,45 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
 //                   ],
 //                 ),
 //               );
+
+// return ListView.builder(
+//         itemCount: doctorList.length,
+//         itemBuilder: (context, index) {
+//           User doctor = User(
+//             doctorList[index].id,
+//             doctorList[index].email,
+//             fullName: doctorList[index].fullName,
+//             status: doctorList[index].status,
+//             profileImage: doctorList[index].profileImage,
+//             ratingNum: doctorList[index].ratingNum,
+//             job: doctorList[index].job,
+//           );
+//           return Container(
+//             child: CustomChatTile(
+//                 mini: false,
+//                 leading: CircleAvatar(
+//                   radius: 30,
+//                   backgroundImage: NetworkImage(doctor.profileImage),
+//                 ),
+//                 title: Text(
+//                   "dr.${doctor.fullName}",
+//                   style: blackTextFont.copyWith(
+//                       fontSize: 18, fontWeight: FontWeight.w600),
+//                 ),
+//                 subtitle: Text(
+//                   doctor.job,
+//                   style: greyTextFont,
+//                 ),
+//                 trailing: RatingBar.readOnly(
+//                   maxRating: 5,
+//                   isHalfAllowed: true,
+//                   initialRating: doctor.ratingNum,
+//                   halfFilledIcon: Icons.star_half,
+//                   filledIcon: Icons.star,
+//                   emptyIcon: Icons.star_border,
+//                   size: 28,
+//                   filledColor: Colors.yellow,
+//                 ),
+//                 onTap: () {}),
+//           );
+//         });
