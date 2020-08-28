@@ -404,7 +404,7 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                           bool getPermission = await Permissions
                               .cameraAndMicrophonePermissionsGranted();
                           if (getPermission) {
-                            CallUtils.dial(
+                            await CallUtils.dial(
                               context: context,
                               userCaller: widget.sender,
                               userReceiver: widget.receiver,

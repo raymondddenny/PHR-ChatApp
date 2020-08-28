@@ -10,3 +10,4 @@ part 'doctor_type.dart';
 part 'message.dart';
 part 'call.dart';
 part 'contact.dart';
+part 'history_patient.dart';

@@ -50,3 +50,4 @@ part 'call_screen.dart';
 part 'pickup_layout.dart';
 part 'view_image.dart';
 part 'user_profile_page_menu.dart';
+part 'see_doctor_page.dart';

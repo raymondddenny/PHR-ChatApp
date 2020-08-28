@@ -43,6 +43,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnChatListScreenPage();
     } else if (event is GoToUserProfilePageMenu) {
       yield OnUserProfilePageMenu();
+    } else if (event is GoToSeeDoctorPage) {
+      yield OnSeeDoctorPage(event.user);
     }
   }
 }

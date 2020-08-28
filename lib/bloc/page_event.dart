@@ -93,3 +93,10 @@ class GoToChatListScreenPage extends PageEvent {
   @override
   List<Object> get props => [];
 }
+
+class GoToSeeDoctorPage extends PageEvent {
+  final User user;
+  GoToSeeDoctorPage(this.user);
+  @override
+  List<Object> get props => [user];
+}

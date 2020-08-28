@@ -96,6 +96,12 @@ class _ChatListContainerState extends State<ChatListContainer> {
             fullName: suggestionList[index].fullName,
             job: suggestionList[index].job,
             profileImage: suggestionList[index].profileImage,
+            alumnus: suggestionList[index].alumnus,
+            noSIP: suggestionList[index].noSIP,
+            status: suggestionList[index].status,
+            tempatPraktek: suggestionList[index].tempatPraktek,
+            state: suggestionList[index].state,
+            ratingNum: suggestionList[index].ratingNum,
           );
           return Container(
             padding: EdgeInsets.only(

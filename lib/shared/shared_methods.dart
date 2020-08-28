@@ -89,3 +89,15 @@ void setImageMessage(String imageMsgUrl, User receiver, User sender,
     'photoUrl': map.photoUrl,
   });
 }
+
+// Future<String> selectDate(BuildContext context, DateTime dateTime) async {
+//   var date = DateTime.now().toString();
+//   var dateParse = DateTime.parse(date);
+//   var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
+
+//   return formattedDate;
+// }
+
+// Future<String> selectTime(BuildContext context, TimeOfDay time) async{
+//   TimeOfDay picked = await
+// }

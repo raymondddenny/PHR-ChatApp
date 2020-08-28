@@ -9,3 +9,4 @@ part 'auth_services.dart';
 part 'user_services.dart';
 part 'message_services.dart';
 part 'call_services.dart';
+part 'history _patient_services.dart';

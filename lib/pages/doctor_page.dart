@@ -174,7 +174,7 @@ class _DoctorPageState extends State<DoctorPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -247,24 +247,27 @@ class TopRateDoctorListTile extends StatefulWidget {
 }
 
 class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
-  List<User> userList;
-  int counter = 0;
+  List<User> userList = [];
   @override
   Widget build(BuildContext context) {
+    // int counter = 0;
     String doctorStatus = "Doctor";
-    return BlocBuilder<UserBloc, UserState>(
-      builder: (context, userState) {
-        if (userState is UserLoaded) {
-          userList = userState.userList;
-          for (int i = 0; i < userList.length; i++) {
-            if (userList[i].status == doctorStatus) {
-              counter++;
-            } else {
-              counter += 0;
+    return StreamBuilder(
+      stream: UserServices.fetchLastRatingDoctor().asStream(),
+      builder: (context, AsyncSnapshot<List<User>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          // userList = snapshot.data;
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i].status == doctorStatus &&
+                snapshot.data[i].ratingNum > 3.0) {
+              userList.add(snapshot.data[i]);
+              // counter++;
+              // print(counter);
             }
-            if (counter > 0) {
-              return Container(
-                  height: 250, child: buildListDoctor(doctorStatus));
+            if (userList.isNotEmpty) {
+              return buildListDoctor(doctorStatus);
             } else {
               return Container(
                 child: Align(
@@ -279,88 +282,110 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
               );
             }
           }
-          return CircularProgressIndicator();
-        } else {
-          return SpinKitFadingCircle(
-            size: 50,
-            color: accentColor2,
-          );
+          return Container();
         }
       },
     );
   }
 
   Widget buildListDoctor(String doctorStatus) {
-    // final List<User> doctorList = doctorStatus.isEmpty
-    //     ? []
-    //     : userList.where((User user) {
-    //         String _doctorQuery = doctorStatus;
-    //         String _getUserStatus = user.status;
-    //         double _rating = user.ratingNum;
-    //         bool matchStatus = _getUserStatus.contains(_doctorQuery);
-    //         return (matchStatus && _rating > 3);
-    //       }).toList();
+    final List<User> doctorList = doctorStatus.isEmpty
+        ? []
+        : userList.where((User user) {
+            String _doctorQuery = doctorStatus;
+            String _getUserStatus = user.status;
+            double _rating = user.ratingNum;
+            bool matchStatus = _getUserStatus.contains(_doctorQuery);
+            return (matchStatus && _rating > 3);
+          }).toList();
 
-    return StreamBuilder(
-      stream: UserServices.fetchLastRatingDoctor(),
-      builder: (context, AsyncSnapshot<List<User>> snapshot) {
-        // final List<User> doctorLists = snapshot.data;
-        final List<User> doctorList = doctorStatus.isEmpty
-            ? []
-            : userList.where((User user) {
-                String _doctorQuery = doctorStatus;
-                String _getUserStatus = user.status;
-                double _rating = user.ratingNum;
-                bool matchStatus = _getUserStatus.contains(_doctorQuery);
-                return (matchStatus && _rating > 3);
-              }).toList();
-        return ListView.builder(
-          itemCount: doctorList.length,
-          itemBuilder: (context, index) {
-            User doctor = User(
-              doctorList[index].id,
-              doctorList[index].email,
-              fullName: doctorList[index].fullName,
-              job: doctorList[index].job,
-              profileImage: doctorList[index].profileImage,
-              ratingNum: doctorList[index].ratingNum,
-            );
-            return Container(
-              child: CustomChatTile(
-                mini: false,
-                leading: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(doctor.profileImage),
-                ),
-                title: Text(
-                  doctor.fullName,
-                  style: blackTextFont.copyWith(
-                    fontSize: 18,
+    return Container(
+      height: 100,
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: doctorList.length,
+              itemBuilder: (context, index) {
+                User doctor = User(
+                  doctorList[index].id,
+                  doctorList[index].email,
+                  fullName: doctorList[index].fullName,
+                  job: doctorList[index].job,
+                  profileImage: doctorList[index].profileImage,
+                  ratingNum: doctorList[index].ratingNum,
+                  alumnus: doctorList[index].alumnus,
+                  noSIP: doctorList[index].noSIP,
+                  state: doctorList[index].state,
+                  status: doctorList[index].status,
+                  tempatPraktek: doctorList[index].tempatPraktek,
+                );
+                return Container(
+                  child: CustomChatTile(
+                    mini: false,
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(doctor.profileImage),
+                    ),
+                    title: Text(
+                      doctor.fullName,
+                      style: blackTextFont.copyWith(
+                        fontSize: 18,
+                      ),
+                    ),
+                    subtitle: Text(
+                      doctor.job,
+                      style: greyTextFont,
+                    ),
+                    trailing: RatingBar.readOnly(
+                      maxRating: 5,
+                      isHalfAllowed: true,
+                      initialRating: doctor.ratingNum,
+                      halfFilledIcon: Icons.star_half,
+                      filledIcon: Icons.star,
+                      emptyIcon: Icons.star_border,
+                      size: 28,
+                      filledColor: Colors.yellow,
+                    ),
+                    onTap: () {
+                      context.bloc<PageBloc>().add(GoToSeeDoctorPage(doctor));
+                    },
                   ),
-                ),
-                subtitle: Text(
-                  doctor.job,
-                  style: greyTextFont,
-                ),
-                trailing: RatingBar.readOnly(
-                  maxRating: 5,
-                  isHalfAllowed: true,
-                  initialRating: doctor.ratingNum,
-                  halfFilledIcon: Icons.star_half,
-                  filledIcon: Icons.star,
-                  emptyIcon: Icons.star_border,
-                  size: 28,
-                  filledColor: Colors.yellow,
-                ),
-                onTap: () {},
-              ),
-            );
-          },
-        );
-      },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+// userList = snapshot.data;
+//             for (int i = 0; i < userList.length; i++) {
+//               if (userList[i].status == doctorStatus &&
+//                   userList[i].ratingNum > 3.0) {
+//                 counter++;
+//                 print(counter);
+//               } else {
+//                 counter--;
+//               }
+//             }
+//             if (counter > 0) {
+//               return buildListDoctor(doctorStatus);
+//             } else {
+//               return Container(
+//                 child: Align(
+//                   alignment: Alignment.center,
+//                   child: Text(
+//                     "...No doctor found for a moment...",
+//                     style: blackTextFont.copyWith(
+//                         fontSize: 18, color: accentColor2),
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               );
+//             }
 
 // ListTile(
 //         //   contentPadding: EdgeInsets.symmetric(horizontal: 5),

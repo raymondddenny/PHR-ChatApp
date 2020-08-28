@@ -58,11 +58,17 @@ class Wrapper extends StatelessWidget {
                                                       : (state
                                                               is OnChatListScreenPage)
                                                           ? ChatListScreen()
-                                                          : MainPage(
-                                                              bottomNavBarIndex:
-                                                                  (state as OnMainPage)
-                                                                      .bottomNavBarindex,
-                                                            ),
+                                                          : (state
+                                                                  is OnSeeDoctorPage)
+                                                              ? SeeDoctorPage(
+                                                                  doctorUser:
+                                                                      state
+                                                                          .user)
+                                                              : MainPage(
+                                                                  bottomNavBarIndex:
+                                                                      (state as OnMainPage)
+                                                                          .bottomNavBarindex,
+                                                                ),
     );
   }
 }

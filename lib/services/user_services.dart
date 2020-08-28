@@ -94,7 +94,11 @@ class UserServices {
       String userId, double newRatingNum) async {
     DocumentSnapshot snapshot = await _userCollection.document(userId).get();
     double ratingNum = snapshot.data['ratingNum'];
-    ratingNum = (ratingNum + newRatingNum) / 2;
+    if (ratingNum <= 0) {
+      ratingNum = ratingNum + newRatingNum;
+    } else {
+      ratingNum = ((ratingNum + newRatingNum) / 2).toDouble();
+    }
     // ratingNum = newRatingNum;
 
     await _userCollection.document(userId).updateData({
@@ -105,23 +109,41 @@ class UserServices {
   static Stream<DocumentSnapshot> getUserStream({@required String uid}) =>
       _userCollection.document(uid).snapshots();
 
-// TODO : Fetch last rating doctor
-  static Stream<List<User>> fetchLastRatingDoctor() {
-    Stream<QuerySnapshot> stream = _userCollection.snapshots();
-    return stream.map((queryDoctor) => queryDoctor.documents
-        .map((doc) => User(
-              doc.data['id'],
-              doc.data['email'],
-              fullName: doc.data['fullName'],
-              job: doc.data['job'],
-              profileImage: doc.data['profileImage'],
-              noSIP: doc.data['noSIP'],
-              status: doc.data['status'],
-              ratingNum: doc.data['ratingNum'],
-              state: doc.data['state'],
-              alumnus: doc.data['alumnus'],
-              tempatPraktek: doc.data['tempatPraktek'],
+  static Future<List<User>> fetchLastRatingDoctor() async {
+    QuerySnapshot qshot = await _userCollection.getDocuments();
+    return qshot.documents
+        .map((value) => User(
+              value.data['uid'],
+              value.data['email'],
+              fullName: value.data['fullName'],
+              job: value.data['job'],
+              profileImage: value.data['profileImage'],
+              noSIP: value.data['noSIP'],
+              status: value.data['status'],
+              ratingNum: value.data['ratingNum'],
+              state: value.data['state'],
+              alumnus: value.data['alumnus'],
+              tempatPraktek: value.data['tempatPraktek'],
             ))
-        .toList());
+        .toList();
   }
+
+  // static Stream<List<User>> fetchLastRatingDoctor() {
+  //   Stream<QuerySnapshot> stream = _userCollection.snapshots();
+  //   return stream.map((queryDoctor) => queryDoctor.documents
+  //       .map((doc) => User(
+  //             doc.data['id'],
+  //             doc.data['email'],
+  //             fullName: doc.data['fullName'],
+  //             job: doc.data['job'],
+  //             profileImage: doc.data['profileImage'],
+  //             noSIP: doc.data['noSIP'],
+  //             status: doc.data['status'],
+  //             ratingNum: doc.data['ratingNum'],
+  //             state: doc.data['state'],
+  //             alumnus: doc.data['alumnus'],
+  //             tempatPraktek: doc.data['tempatPraktek'],
+  //           ))
+  //       .toList());
+  // }
 }

@@ -16,11 +16,21 @@ class _CallScreenState extends State<CallScreen> {
   final _infoStrings = <String>[];
   bool muted = false;
 
+  TextEditingController nameController;
+  TextEditingController doctorNameController;
+  TextEditingController ageController;
+  TextEditingController symptomController;
+  TextEditingController currentCondition;
+  String patientStatus = "";
+  Timestamp dateTime;
+
   @override
   void initState() {
     super.initState();
     // addPostFrameCallback();
     initializeAgora();
+    nameController = TextEditingController(text: widget.call.receiverName);
+    nameController = TextEditingController(text: widget.call.callerName);
   }
 
   Future<void> initializeAgora() async {
@@ -394,6 +404,7 @@ class _CallScreenState extends State<CallScreen> {
                         ),
                         RawMaterialButton(
                           onPressed: () {
+                            // TODO : review app and simpan data pasien (show dialog) oleh dokter
                             if (widget.call.callerStatus == "Patient" &&
                                 widget.call.receiverStatus == "Doctor") {
                               showDialog<String>(
@@ -426,6 +437,7 @@ class _CallScreenState extends State<CallScreen> {
                                       },
                                     );
                                   });
+
                               CallServices.endCall(
                                 call: widget.call,
                               );
@@ -435,52 +447,129 @@ class _CallScreenState extends State<CallScreen> {
                                   .add(GoToMainPage(bottomNavBarIndex: 1));
                             } else if (widget.call.callerStatus == "Doctor" &&
                                 widget.call.receiverStatus == "Patient") {
-                              showDialog<String>(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return RatingDialog(
-                                      icon: Image(
-                                        image: NetworkImage(
-                                            "${widget.call.callerPhoto}"),
-                                        height: 100,
-                                      ), // set your own image/icon widget
-                                      title: "Doctor Rating Consultation",
-                                      description:
-                                          "How was the consultation with dr. ${widget.call.callerName}",
-                                      submitButton: "SUBMIT",
-                                      // alternativeButton:
-                                      //     "Contact us instead?", // optional
-                                      positiveComment:
-                                          "We are so happy to hear :)", // optional
-                                      negativeComment:
-                                          "We're sad to hear :(", // optional
-                                      accentColor: Colors.red, // optional
-                                      onSubmitPressed: (int rating) async {
-                                        print(
-                                            "onSubmitPressed: rating = $rating");
-                                        await UserServices.setDoctorRating(
-                                            widget.call.callerId,
-                                            rating.toDouble());
-                                      },
-                                    );
-                                  });
-                              CallServices.endCall(
-                                call: widget.call,
-                              );
+                              // TODO : show dialog for record patient record
 
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToMainPage(bottomNavBarIndex: 1));
-                            } else if (widget.call.callerStatus == "Doctor" ||
-                                widget.call.receiverStatus == "Doctor") {
-                              CallServices.endCall(
-                                call: widget.call,
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Column(
+                                    children: [
+                                      TextField(
+                                        controller: nameController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            labelText: "Nama Pasien"),
+                                      ),
+                                      TextField(
+                                        controller: doctorNameController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            labelText: "Nama Dokter"),
+                                      ),
+                                      TextField(
+                                        controller: ageController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            labelText: "Umur Pasien"),
+                                      ),
+                                      TextField(
+                                        controller: symptomController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            labelText: "Diagnosa Pasien"),
+                                      ),
+                                      Container(
+                                        height: 50,
+                                        child: Column(
+                                          children: [
+                                            Text("Patient Status"),
+                                            RadioListTile(
+                                                title: Text("Berobat Jalan"),
+                                                value: "Berobat Jalan",
+                                                groupValue: patientStatus,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    patientStatus = value;
+                                                  });
+                                                }),
+                                            RadioListTile(
+                                                title: Text("Rujuk Internal"),
+                                                value: "Rujuk Internal",
+                                                groupValue: patientStatus,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    patientStatus = value;
+                                                  });
+                                                }),
+                                            RadioListTile(
+                                                title: Text("Rujuk Lanjut"),
+                                                value: "Rujuk Lanjut",
+                                                groupValue: patientStatus,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    patientStatus = value;
+                                                  });
+                                                }),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                          child: Column(
+                                        children: [
+                                          Text(dateTime == null
+                                              ? "Pilih tanggal konsultasi"
+                                              : "Tanggal Konsultasi = $dateTime"),
+                                          RaisedButton(onPressed: () {
+                                            showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2010),
+                                              lastDate: DateTime(2030),
+                                            ).then((date) {
+                                              setState(() {
+                                                dateTime = Timestamp
+                                                    .fromMillisecondsSinceEpoch(
+                                                        date.millisecondsSinceEpoch);
+                                              });
+                                            });
+                                          }),
+                                        ],
+                                      )),
+                                      SizedBox(
+                                        height: 45,
+                                        width: 250,
+                                        child: RaisedButton(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Text(
+                                            "Submit Patient ${widget.call.receiverName} History",
+                                            style: whiteTextFont.copyWith(
+                                              fontSize: 16,
+                                              color: Color(0xFFBEBEBE),
+                                            ),
+                                          ),
+                                          disabledColor: accentColor3,
+                                          color: mainColor,
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToMainPage(bottomNavBarIndex: 1));
                             } else {
                               CallServices.endCall(
                                 call: widget.call,

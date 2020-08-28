@@ -101,3 +101,10 @@ class OnChatListScreenPage extends PageState {
   @override
   List<Object> get props => [];
 }
+
+class OnSeeDoctorPage extends PageState {
+  final User user;
+  OnSeeDoctorPage(this.user);
+  @override
+  List<Object> get props => [user];
+}
