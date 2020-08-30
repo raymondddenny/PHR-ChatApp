@@ -157,6 +157,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
             );
           }
 
+          // return DashChat(messages: null, user: null, onSend: null);
           return ListView.builder(
               padding: EdgeInsets.all(defaultMargin),
               itemCount: snapshot.data.documents.length,
@@ -178,10 +179,29 @@ class ChatMessageItem extends StatefulWidget {
   _ChatMessageItemState createState() => _ChatMessageItemState();
 }
 
+bool isShowDate = false;
+
 class _ChatMessageItemState extends State<ChatMessageItem> {
+  setShowDate(bool val) {
+    setState(() {
+      isShowDate = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Message _message = Message.fromMap(widget.documentSnapshot.data);
+    // var date = DateFormat.yMMMd().format(_message.timeStamp.toDate());
+    // var dateNow = DateFormat.yMMMd().format(DateTime.now());
+    // int check = 0;
+    // if ((date == dateNow) && check > 0) {
+    //   setShowDate(true);
+    //   setState(() {
+    //     check++;
+    //   });
+    // } else {
+    //   setShowDate(false);
+    // }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
       child: Container(
@@ -198,10 +218,21 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
   // to show the message from the sender
   Widget senderLayout(Message message, BuildContext context) {
     Radius messageRadius = Radius.circular(5);
-    String time = DateFormat.jm().format(message.timeStamp.toDate());
+    String time = DateFormat.jm().add_MMMd().format(message.timeStamp.toDate());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        // Center(
+        //   child: Container(
+        //     padding: EdgeInsets.all(3),
+        //     decoration: BoxDecoration(
+        //       color: Colors.grey[300],
+        //       borderRadius: BorderRadius.circular(18),
+        //     ),
+        //     child: Text(date),
+        //   ),
+        // ),
         (message.type == "image")
             ? GestureDetector(
                 onTap: () {
@@ -335,6 +366,7 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
   bool isWriting = false;
   bool isStop = true;
   int counter = 0;
+  bool showDate = false;
 
   setWritingTo(bool val) {
     setState(() {
@@ -501,6 +533,7 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
     setState(() {
       isWriting = false;
       textChatController.text = "";
+      showDate = false;
     });
 
     MessageServices.addMessageToDb(_message, widget.sender, widget.receiver);

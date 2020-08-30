@@ -24,6 +24,7 @@ import 'package:phr_skripsi_chat/shared/shared.dart';
 import 'package:phr_skripsi_chat/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dash_chat/dash_chat.dart';
 
 import 'package:path/path.dart';
 import 'package:rating_bar/rating_bar.dart';
