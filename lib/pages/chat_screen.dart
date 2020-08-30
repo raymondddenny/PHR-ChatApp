@@ -19,7 +19,46 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
         .add(ChangeTheme(ThemeData().copyWith(primaryColor: mainColor)));
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     return WillPopScope(onWillPop: () async {
-      context.bloc<PageBloc>().add(GoToMainPage(bottomNavBarIndex: 1));
+      if (widget.sender.status == "Patient") {
+        showDialog<String>(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return RatingDialog(
+                icon: Image(
+                  image: NetworkImage("${widget.receiver.profileImage}"),
+                  height: 100,
+                ), // set your own image/icon widget
+                title: "Doctor Rating Consultation",
+                description:
+                    "How was the consultation with dr. ${widget.receiver.fullName}",
+                submitButton: "SUBMIT",
+                // alternativeButton:
+                //     "Contact us instead?", // optional
+                positiveComment: "We are so happy to hear :)", // optional
+                negativeComment: "We're sad to hear :(", // optional
+                accentColor: Colors.red, // optional
+                onSubmitPressed: (int rating) async {
+                  print("onSubmitPressed: rating = $rating");
+                  await UserServices.setDoctorRating(
+                      widget.receiver.id, rating.toDouble());
+                },
+              );
+            });
+        context.bloc<PageBloc>().add(GoToMainPage(bottomNavBarIndex: 0));
+      } else {
+        Call call = Call(
+          callerId: widget.sender.id,
+          callerName: widget.sender.fullName,
+          callerStatus: widget.sender.status,
+          receiverId: widget.receiver.id,
+          receiverName: widget.receiver.fullName,
+          receiverStatus: widget.receiver.status,
+        );
+
+        context.bloc<PageBloc>().add(GoToHistoryPatientPage(call));
+      }
+
       return;
     }, child: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
       return PickupLayout(

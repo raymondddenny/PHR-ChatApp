@@ -16,21 +16,11 @@ class _CallScreenState extends State<CallScreen> {
   final _infoStrings = <String>[];
   bool muted = false;
 
-  TextEditingController nameController;
-  TextEditingController doctorNameController;
-  TextEditingController ageController;
-  TextEditingController symptomController;
-  TextEditingController currentCondition;
-  String patientStatus = "";
-  Timestamp dateTime;
-
   @override
   void initState() {
     super.initState();
     // addPostFrameCallback();
     initializeAgora();
-    nameController = TextEditingController(text: widget.call.receiverName);
-    nameController = TextEditingController(text: widget.call.callerName);
   }
 
   Future<void> initializeAgora() async {
@@ -234,56 +224,6 @@ class _CallScreenState extends State<CallScreen> {
     return Container();
   }
 
-  /// Info panel to show logs
-  // Widget _panel() {
-  //   return Container(
-  //     padding: const EdgeInsets.symmetric(vertical: 48),
-  //     alignment: Alignment.bottomCenter,
-  //     child: FractionallySizedBox(
-  //       heightFactor: 0.5,
-  //       child: Container(
-  //         padding: const EdgeInsets.symmetric(vertical: 48),
-  //         child: ListView.builder(
-  //           reverse: true,
-  //           itemCount: _infoStrings.length,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             if (_infoStrings.isEmpty) {
-  //               return null;
-  //             }
-  //             return Padding(
-  //               padding: const EdgeInsets.symmetric(
-  //                 vertical: 3,
-  //                 horizontal: 10,
-  //               ),
-  //               child: Row(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   Flexible(
-  //                     child: Container(
-  //                       padding: const EdgeInsets.symmetric(
-  //                         vertical: 2,
-  //                         horizontal: 5,
-  //                       ),
-  //                       decoration: BoxDecoration(
-  //                         color: Colors.yellowAccent,
-  //                         borderRadius: BorderRadius.circular(5),
-  //                       ),
-  //                       child: Text(
-  //                         _infoStrings[index],
-  //                         style: TextStyle(color: Colors.blueGrey),
-  //                       ),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void _onToggleMute() {
     setState(() {
       muted = !muted;
@@ -403,7 +343,7 @@ class _CallScreenState extends State<CallScreen> {
                           padding: const EdgeInsets.all(12.0),
                         ),
                         RawMaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // TODO : review app and simpan data pasien (show dialog) oleh dokter
                             if (widget.call.callerStatus == "Patient" &&
                                 widget.call.receiverStatus == "Doctor") {
@@ -447,129 +387,13 @@ class _CallScreenState extends State<CallScreen> {
                                   .add(GoToMainPage(bottomNavBarIndex: 1));
                             } else if (widget.call.callerStatus == "Doctor" &&
                                 widget.call.receiverStatus == "Patient") {
-                              // TODO : show dialog for record patient record
-
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return Column(
-                                    children: [
-                                      TextField(
-                                        controller: nameController,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            labelText: "Nama Pasien"),
-                                      ),
-                                      TextField(
-                                        controller: doctorNameController,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            labelText: "Nama Dokter"),
-                                      ),
-                                      TextField(
-                                        controller: ageController,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            labelText: "Umur Pasien"),
-                                      ),
-                                      TextField(
-                                        controller: symptomController,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            labelText: "Diagnosa Pasien"),
-                                      ),
-                                      Container(
-                                        height: 50,
-                                        child: Column(
-                                          children: [
-                                            Text("Patient Status"),
-                                            RadioListTile(
-                                                title: Text("Berobat Jalan"),
-                                                value: "Berobat Jalan",
-                                                groupValue: patientStatus,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    patientStatus = value;
-                                                  });
-                                                }),
-                                            RadioListTile(
-                                                title: Text("Rujuk Internal"),
-                                                value: "Rujuk Internal",
-                                                groupValue: patientStatus,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    patientStatus = value;
-                                                  });
-                                                }),
-                                            RadioListTile(
-                                                title: Text("Rujuk Lanjut"),
-                                                value: "Rujuk Lanjut",
-                                                groupValue: patientStatus,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    patientStatus = value;
-                                                  });
-                                                }),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                          child: Column(
-                                        children: [
-                                          Text(dateTime == null
-                                              ? "Pilih tanggal konsultasi"
-                                              : "Tanggal Konsultasi = $dateTime"),
-                                          RaisedButton(onPressed: () {
-                                            showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2010),
-                                              lastDate: DateTime(2030),
-                                            ).then((date) {
-                                              setState(() {
-                                                dateTime = Timestamp
-                                                    .fromMillisecondsSinceEpoch(
-                                                        date.millisecondsSinceEpoch);
-                                              });
-                                            });
-                                          }),
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        height: 45,
-                                        width: 250,
-                                        child: RaisedButton(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8)),
-                                          child: Text(
-                                            "Submit Patient ${widget.call.receiverName} History",
-                                            style: whiteTextFont.copyWith(
-                                              fontSize: 16,
-                                              color: Color(0xFFBEBEBE),
-                                            ),
-                                          ),
-                                          disabledColor: accentColor3,
-                                          color: mainColor,
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                              CallServices.endCall(
+                                call: widget.call,
                               );
+
+                              context
+                                  .bloc<PageBloc>()
+                                  .add(GoToHistoryPatientPage(widget.call));
                             } else {
                               CallServices.endCall(
                                 call: widget.call,

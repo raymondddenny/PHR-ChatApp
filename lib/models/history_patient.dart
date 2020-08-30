@@ -33,7 +33,16 @@ class HistoryPatient extends Equatable {
       );
 
   factory HistoryPatient.fromMap(Map<String, dynamic> mapData) {
-    return HistoryPatient();
+    return HistoryPatient(
+      patientId: mapData['patientId'],
+      doctorId: mapData['doctorId'],
+      patientName: mapData['patientName'],
+      doctorName: mapData['doctorName'],
+      patientAge: mapData['patientAge'],
+      patientDiagnose: mapData['patientDiagnose'],
+      patientStatus: mapData['patientStatus'],
+      timestamp: mapData['timestamp'],
+    );
   }
 
   @override

@@ -108,3 +108,10 @@ class OnSeeDoctorPage extends PageState {
   @override
   List<Object> get props => [user];
 }
+
+class OnHistoryPatientPage extends PageState {
+  final Call call;
+  OnHistoryPatientPage(this.call);
+  @override
+  List<Object> get props => [call];
+}

@@ -64,11 +64,17 @@ class Wrapper extends StatelessWidget {
                                                                   doctorUser:
                                                                       state
                                                                           .user)
-                                                              : MainPage(
-                                                                  bottomNavBarIndex:
-                                                                      (state as OnMainPage)
-                                                                          .bottomNavBarindex,
-                                                                ),
+                                                              : (state
+                                                                      is OnHistoryPatientPage)
+                                                                  ? HistoryPatientPage(
+                                                                      call: state
+                                                                          .call,
+                                                                    )
+                                                                  : MainPage(
+                                                                      bottomNavBarIndex:
+                                                                          (state as OnMainPage)
+                                                                              .bottomNavBarindex,
+                                                                    ),
     );
   }
 }
