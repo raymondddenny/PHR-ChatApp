@@ -54,7 +54,11 @@ class Wrapper extends StatelessWidget {
                                                     )
                                                   : (state is OnCallScreenPage)
                                                       ? CallScreen(
-                                                          call: state.call)
+                                                          call: state.call,
+                                                          caller: state.sender,
+                                                          receiver:
+                                                              state.receiver,
+                                                        )
                                                       : (state
                                                               is OnChatListScreenPage)
                                                           ? ChatListScreen()
@@ -70,11 +74,16 @@ class Wrapper extends StatelessWidget {
                                                                       call: state
                                                                           .call,
                                                                     )
-                                                                  : MainPage(
-                                                                      bottomNavBarIndex:
-                                                                          (state as OnMainPage)
-                                                                              .bottomNavBarindex,
-                                                                    ),
+                                                                  : (state
+                                                                          is OnDoctorRatingPage)
+                                                                      ? DoctorRatingPage(
+                                                                          call:
+                                                                              state.call,
+                                                                        )
+                                                                      : MainPage(
+                                                                          bottomNavBarIndex:
+                                                                              (state as OnMainPage).bottomNavBarindex,
+                                                                        ),
     );
   }
 }

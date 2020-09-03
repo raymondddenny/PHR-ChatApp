@@ -56,5 +56,4 @@ class HistoryPatient extends Equatable {
         patientStatus,
         timestamp
       ];
-  // TODO : check model lagi, sama buat history patient services
 }

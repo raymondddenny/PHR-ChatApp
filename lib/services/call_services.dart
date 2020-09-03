@@ -4,6 +4,9 @@ class CallServices {
   static CollectionReference _callCollection =
       Firestore.instance.collection('call');
 
+  static CollectionReference _callLogCollection =
+      Firestore.instance.collection('callLogs');
+
   static Future<bool> makeCall({Call call}) async {
     try {
       call.hasDialled = true;
@@ -20,6 +23,13 @@ class CallServices {
       return false;
     }
   }
+
+  // static Future<void> saveCallLog({Call call}) async {
+  //   return await _callLogCollection
+  //       .document(call.callerId)
+  //       .collection(call.receiverId)
+  //       .add({'': call.ca});
+  // }
 
   static Future<bool> endCall({Call call}) async {
     try {

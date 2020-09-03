@@ -27,34 +27,26 @@ class ChatListScreenContainer extends StatelessWidget {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, userState) {
         if (userState is UserLoaded) {
-          return Container(
-            margin: EdgeInsets.only(
-              left: defaultMargin,
-              right: defaultMargin,
-            ),
-            child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    MessageServices.fetchContacts(userId: userState.user.id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var docList = snapshot.data.documents;
-                    if (docList.isEmpty) {
-                      return QuietBox();
-                    }
-                    return ListView.builder(
-                        itemCount: docList.length,
-                        itemBuilder: (_, index) {
-                          Contact contact =
-                              Contact.fromMap(docList[index].data);
-                          return ContactView(contact);
-                        });
-                  } else {
-                    return Center(
-                        child: SpinKitFadingCircle(
-                            color: accentColor2, size: 100));
+          return StreamBuilder<QuerySnapshot>(
+              stream: MessageServices.fetchContacts(userId: userState.user.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var docList = snapshot.data.documents;
+                  if (docList.isEmpty) {
+                    return QuietBox();
                   }
-                }),
-          );
+                  return ListView.builder(
+                      itemCount: docList.length,
+                      itemBuilder: (_, index) {
+                        Contact contact = Contact.fromMap(docList[index].data);
+                        return ContactView(contact);
+                      });
+                } else {
+                  return Center(
+                      child:
+                          SpinKitFadingCircle(color: accentColor2, size: 100));
+                }
+              });
         } else {
           return Container();
         }

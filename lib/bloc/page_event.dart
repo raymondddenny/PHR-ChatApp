@@ -83,10 +83,12 @@ class GoToChatScreenPage extends PageEvent {
 
 class GoToCallScreenPage extends PageEvent {
   final Call call;
-  GoToCallScreenPage({this.call});
+  final User sender;
+  final User receiver;
+  GoToCallScreenPage({this.call, this.sender, this.receiver});
 
   @override
-  List<Object> get props => [call];
+  List<Object> get props => [call, sender, receiver];
 }
 
 class GoToChatListScreenPage extends PageEvent {
@@ -104,6 +106,13 @@ class GoToSeeDoctorPage extends PageEvent {
 class GoToHistoryPatientPage extends PageEvent {
   final Call call;
   GoToHistoryPatientPage(this.call);
+  @override
+  List<Object> get props => [call];
+}
+
+class GoToDoctorRatingPage extends PageEvent {
+  final Call call;
+  GoToDoctorRatingPage(this.call);
   @override
   List<Object> get props => [call];
 }

@@ -2,6 +2,7 @@ part of 'shared.dart';
 
 class CallUtils {
   static bool hasCallMade;
+  static Future<bool> hasCall;
   static Call call;
 
   static dial({User userCaller, User userReceiver, context}) async {
@@ -19,9 +20,8 @@ class CallUtils {
     );
 
     bool callMade = await CallServices.makeCall(call: call);
-    hasCallMade = callMade;
-
     call.hasDialled = true;
+    hasCallMade = callMade;
   }
 
   static int stateToNum(UserStates userState) {

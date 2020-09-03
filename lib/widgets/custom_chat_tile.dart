@@ -61,7 +61,7 @@ class CustomChatTile extends StatelessWidget {
                         Row(
                           children: [
                             icon != null ? icon : Container(),
-                            subtitle,
+                            Expanded(child: subtitle),
                           ],
                         )
                       ],

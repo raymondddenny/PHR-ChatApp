@@ -92,9 +92,11 @@ class OnChatScreenPage extends PageState {
 
 class OnCallScreenPage extends PageState {
   final Call call;
-  OnCallScreenPage(this.call);
+  final User sender;
+  final User receiver;
+  OnCallScreenPage(this.call, this.sender, this.receiver);
   @override
-  List<Object> get props => [call];
+  List<Object> get props => [call, sender, receiver];
 }
 
 class OnChatListScreenPage extends PageState {
@@ -112,6 +114,13 @@ class OnSeeDoctorPage extends PageState {
 class OnHistoryPatientPage extends PageState {
   final Call call;
   OnHistoryPatientPage(this.call);
+  @override
+  List<Object> get props => [call];
+}
+
+class OnDoctorRatingPage extends PageState {
+  final Call call;
+  OnDoctorRatingPage(this.call);
   @override
   List<Object> get props => [call];
 }

@@ -13,6 +13,8 @@ class LastMessageContainer extends StatelessWidget {
           var docList = snapshot.data.documents;
           if (docList.isNotEmpty) {
             Message message = Message.fromMap(docList.last.data);
+            String time =
+                DateFormat.jm().add_MMMd().format(message.timeStamp.toDate());
             return Container(
               width: MediaQuery.of(context).size.width * 0.6,
               child: (message.type == "image")
@@ -26,11 +28,22 @@ class LastMessageContainer extends StatelessWidget {
                         Text("Send a photo")
                       ],
                     )
-                  : Text(
-                      message.message,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: greyTextFont.copyWith(fontSize: 14),
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          message.message,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: greyTextFont.copyWith(fontSize: 14),
+                        ),
+                        Text(
+                          time,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: greyTextFont.copyWith(fontSize: 14),
+                        ),
+                      ],
                     ),
             );
           }

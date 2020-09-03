@@ -53,3 +53,4 @@ part 'view_image.dart';
 part 'user_profile_page_menu.dart';
 part 'see_doctor_page.dart';
 part 'history_patient_input_page.dart';
+part 'doctor_rating_page.dart';

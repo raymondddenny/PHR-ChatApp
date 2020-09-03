@@ -70,7 +70,49 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  context.bloc<PageBloc>().add(GoToMainPage());
+                  if (widget.sender.status == "Patient") {
+                    showDialog<String>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return RatingDialog(
+                            icon: Image(
+                              image: NetworkImage(
+                                  "${widget.receiver.profileImage}"),
+                              height: 100,
+                            ), // set your own image/icon widget
+                            title: "Doctor Rating Consultation",
+                            description:
+                                "How was the consultation with dr. ${widget.receiver.fullName}",
+                            submitButton: "SUBMIT",
+                            // alternativeButton:
+                            //     "Contact us instead?", // optional
+                            positiveComment:
+                                "We are so happy to hear :)", // optional
+                            negativeComment: "We're sad to hear :(", // optional
+                            accentColor: Colors.red, // optional
+                            onSubmitPressed: (int rating) async {
+                              print("onSubmitPressed: rating = $rating");
+                              await UserServices.setDoctorRating(
+                                  widget.receiver.id, rating.toDouble());
+                            },
+                          );
+                        });
+                    context
+                        .bloc<PageBloc>()
+                        .add(GoToMainPage(bottomNavBarIndex: 0));
+                  } else {
+                    Call call = Call(
+                      callerId: widget.sender.id,
+                      callerName: widget.sender.fullName,
+                      callerStatus: widget.sender.status,
+                      receiverId: widget.receiver.id,
+                      receiverName: widget.receiver.fullName,
+                      receiverStatus: widget.receiver.status,
+                    );
+
+                    context.bloc<PageBloc>().add(GoToHistoryPatientPage(call));
+                  }
                 },
               ),
               title: Column(
@@ -114,6 +156,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
                       ),
                     )
                   : Container(),
+              SizedBox(height: 10),
               ChatBottomControl(
                 receiver: widget.receiver,
                 sender: widget.sender,
@@ -239,6 +282,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
+                          // to see image in new page
                           builder: (context) => ViewImage(message)));
                 },
                 child: Container(
@@ -337,16 +381,36 @@ class _ChatMessageItemState extends State<ChatMessageItem> {
 // Send Image
   getMessage(Message message, BuildContext context) {
     return (message.type == "image")
-        ? CachedImage(
-            message.photoUrl,
-            height: 250,
-            width: 250,
-            radius: 10,
-          )
-        : Text(
-            message.message,
-            style: whiteTextFont.copyWith(fontSize: 16),
-          );
+        ? (message.photoUrl != null)
+            ? CachedImage(
+                message.photoUrl,
+                height: 250,
+                width: 250,
+                radius: 10,
+              )
+            : Text("no image url")
+        : (message.type == "call")
+            ? Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.call_end,
+                      color: Colors.grey[300],
+                      size: 38,
+                    ),
+                    Text(
+                      message.callDuration,
+                      style: greyTextFont.copyWith(
+                          color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
+              )
+            : Text(
+                message.message,
+                style: whiteTextFont.copyWith(fontSize: 16),
+              );
   }
 }
 
@@ -481,11 +545,19 @@ class _ChatBottomControlState extends State<ChatBottomControl> {
                               userReceiver: widget.receiver,
                             );
                             bool hasCallMade = CallUtils.hasCallMade;
-                            if (hasCallMade) {
+                            if (hasCallMade == true) {
                               Call call = CallUtils.call;
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToCallScreenPage(call: call));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => CallScreen(
+                              //         call: call,
+                              //       ),
+                              //     ));
+                              context.bloc<PageBloc>().add(GoToCallScreenPage(
+                                  call: call,
+                                  sender: widget.sender,
+                                  receiver: widget.receiver));
                             }
                           } else {}
                         }),

@@ -38,7 +38,7 @@ class PageBloc extends Bloc<PageEvent, PageState> {
     } else if (event is GoToChatScreenPage) {
       yield OnChatScreenPage(event.receiver, event.sender);
     } else if (event is GoToCallScreenPage) {
-      yield OnCallScreenPage(event.call);
+      yield OnCallScreenPage(event.call, event.sender, event.receiver);
     } else if (event is GoToChatListScreenPage) {
       yield OnChatListScreenPage();
     } else if (event is GoToUserProfilePageMenu) {
@@ -47,6 +47,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnSeeDoctorPage(event.user);
     } else if (event is GoToHistoryPatientPage) {
       yield OnHistoryPatientPage(event.call);
+    } else if (event is GoToDoctorRatingPage) {
+      yield OnDoctorRatingPage(event.call);
     }
   }
 }

@@ -9,27 +9,32 @@ class Message extends Equatable {
   final String message;
   final Timestamp timeStamp;
   final String photoUrl;
+  final String callDuration;
 
-  Message(
-      {this.senderId,
-      this.receiverId,
-      this.senderName,
-      this.receiverName,
-      this.type,
-      this.message,
-      this.timeStamp,
-      this.photoUrl});
+  Message({
+    this.senderId,
+    this.receiverId,
+    this.senderName,
+    this.receiverName,
+    this.type,
+    this.message,
+    this.timeStamp,
+    this.photoUrl,
+    this.callDuration,
+  });
 
   // to perform send image message
-  Message.imageMessage(
-      {this.senderId,
-      this.senderName,
-      this.receiverName,
-      this.receiverId,
-      this.type,
-      this.message,
-      this.timeStamp,
-      this.photoUrl});
+  Message.imageMessage({
+    this.senderId,
+    this.senderName,
+    this.receiverName,
+    this.receiverId,
+    this.type,
+    this.message,
+    this.timeStamp,
+    this.photoUrl,
+    this.callDuration,
+  });
 
   Message toMap() => Message(
         senderId: senderId ?? this.senderId,
@@ -39,6 +44,7 @@ class Message extends Equatable {
         type: type ?? this.receiverId,
         message: message ?? this.message,
         timeStamp: timeStamp ?? this.timeStamp,
+        callDuration: callDuration ?? this.callDuration,
       );
 
   Message toImageMap() => Message(
@@ -62,6 +68,7 @@ class Message extends Equatable {
       message: mapData['message'],
       timeStamp: mapData['timeStamp'],
       photoUrl: mapData['photoUrl'],
+      callDuration: mapData['callDuration'],
     );
   }
 
@@ -75,5 +82,6 @@ class Message extends Equatable {
         message,
         timeStamp,
         photoUrl,
+        callDuration,
       ];
 }

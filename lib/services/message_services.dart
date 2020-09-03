@@ -17,6 +17,7 @@ class MessageServices {
       'receiverId': message.receiverId,
       'timeStamp': message.timeStamp,
       'type': message.type,
+      'callDuration': message.callDuration ?? "",
     });
 
     addToContact(senderId: message.senderId, receiverId: message.receiverId);
@@ -32,6 +33,7 @@ class MessageServices {
       'receiverId': message.receiverId,
       'timeStamp': message.timeStamp,
       'type': message.type,
+      'callDuration': message.callDuration ?? "",
     });
   }
 

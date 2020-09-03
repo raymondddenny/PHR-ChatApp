@@ -2,7 +2,9 @@ part of 'pages.dart';
 
 class PickUpScreen extends StatefulWidget {
   final Call call;
-  PickUpScreen({@required this.call});
+  final User caller;
+  final User receiver;
+  PickUpScreen({@required this.call, this.caller, this.receiver});
 
   @override
   _PickUpScreenState createState() => _PickUpScreenState();
@@ -53,19 +55,10 @@ class _PickUpScreenState extends State<PickUpScreen> {
                       bool getPermission = await Permissions
                           .cameraAndMicrophonePermissionsGranted();
                       if (getPermission) {
-                        // counter = 0;
-                        // isStop = false;
-                        // Timer.periodic(Duration(seconds: 1), (timer) {
-                        //   if (isStop) {
-                        //     timer.cancel();
-                        //   }
-                        //   setState(() {
-                        //     counter++;
-                        //   });
-                        // });
-                        context
-                            .bloc<PageBloc>()
-                            .add(GoToCallScreenPage(call: widget.call));
+                        context.bloc<PageBloc>().add(GoToCallScreenPage(
+                            call: widget.call,
+                            sender: widget.caller,
+                            receiver: widget.receiver));
                       }
                     }),
                 SizedBox(
@@ -74,7 +67,6 @@ class _PickUpScreenState extends State<PickUpScreen> {
                 IconButton(
                     icon: Icon(Icons.call_end, color: Colors.red),
                     onPressed: () async {
-                      // isStop = false;
                       await CallServices.endCall(call: widget.call);
                     }),
               ],

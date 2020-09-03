@@ -2,8 +2,10 @@ part of 'pages.dart';
 
 class CallScreen extends StatefulWidget {
   final Call call;
+  final User caller;
+  final User receiver;
 
-  CallScreen({@required this.call});
+  CallScreen({@required this.call, this.caller, this.receiver});
 
   @override
   _CallScreenState createState() => _CallScreenState();
@@ -11,16 +13,73 @@ class CallScreen extends StatefulWidget {
 
 class _CallScreenState extends State<CallScreen> {
   StreamSubscription callStreamSubscription;
+  UserProvider userProvider;
 
   static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
+  bool isCalling = true;
+  DateTime startTime;
+  String elapsed = '00:00:00';
+
+  // void startTimeCall() {
+  //   startTime = DateTime.now();
+  // }
+  void startTimeCall() {
+    swatch.start();
+  }
+
+  Stopwatch swatch = Stopwatch();
+
+  String showTimeCallDuration() {
+    return elapsed = swatch.elapsed.inHours.toString().padLeft(2, "0") +
+        "h:" +
+        (swatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") +
+        "m:" +
+        (swatch.elapsed.inSeconds % 60).toString().padLeft(2, "0") +
+        "s";
+  }
 
   @override
   void initState() {
     super.initState();
-    // addPostFrameCallback();
+    addPostFrameCallback(this.context);
     initializeAgora();
+    // time call start
+    startTimeCall();
+  }
+
+  addPostFrameCallback(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      callStreamSubscription =
+          CallServices.callStream(id: userProvider.getUser.id)
+              .listen((DocumentSnapshot ds) {
+        // defining the logic
+        switch (ds.data) {
+          case null:
+            // snapshot is null which means that call is hanged and documents are deleted
+            // Navigator.pop(context);
+            User caller = widget.caller;
+            User receiver = widget.receiver;
+            if (userProvider.getUser.id == widget.call.callerId) {
+              context
+                  .bloc<PageBloc>()
+                  .add(GoToChatScreenPage(sender: caller, receiver: receiver));
+            } else {
+              context
+                  .bloc<PageBloc>()
+                  .add(GoToChatScreenPage(sender: receiver, receiver: caller));
+            }
+
+            break;
+
+          default:
+            break;
+        }
+      });
+    });
   }
 
   Future<void> initializeAgora() async {
@@ -175,32 +234,12 @@ class _CallScreenState extends State<CallScreen> {
             child: Column(
           children: <Widget>[_videoView(views[0])],
         ));
-      // case 2:
-      //   return SizedBox(
-      //       child: Stack(
-      //     children: <Widget>[
-      //       _expandedVideoRow([views[1]]),
-      //       Padding(
-      //         padding: const EdgeInsets.fromLTRB(0, 28, 16, 0),
-      //         child: Align(
-      //             alignment: Alignment.topRight,
-      //             child: Container(
-      //                 height: 200,
-      //                 width: 100,
-      //                 child: Container(
-      //                     decoration: BoxDecoration(
-      //                       borderRadius: BorderRadius.circular(12),
-      //                     ),
-      //                     child: _expandedVideoRow([views[0]])))),
-      //       )
-      //     ],
-      //   ));
       case 2:
         return Container(
             child: Column(
           children: <Widget>[
             _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
+            _expandedVideoRow([views[1]]),
           ],
         ));
       // case 3:
@@ -235,57 +274,61 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.switchCamera();
   }
 
-  /// Toolbar layout
-  // Widget _toolbar() {
-  //   return Container(
-  //     alignment: Alignment.bottomCenter,
-  //     padding: const EdgeInsets.symmetric(vertical: 48),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: <Widget>[
-  //         RawMaterialButton(
-  //           onPressed: _onToggleMute,
-  //           child: Icon(
-  //             muted ? Icons.mic : Icons.mic_off,
-  //             color: muted ? Colors.white : Colors.blueAccent,
-  //             size: 20.0,
-  //           ),
-  //           shape: CircleBorder(),
-  //           elevation: 2.0,
-  //           fillColor: muted ? Colors.blueAccent : Colors.white,
-  //           padding: const EdgeInsets.all(12.0),
-  //         ),
-  //         RawMaterialButton(
-  //           onPressed: () => CallServices.endCall(
-  //             call: widget.call,
-  //           ),
-  //           child: Icon(
-  //             Icons.call_end,
-  //             color: Colors.white,
-  //             size: 35.0,
-  //           ),
-  //           shape: CircleBorder(),
-  //           elevation: 2.0,
-  //           fillColor: Colors.redAccent,
-  //           padding: const EdgeInsets.all(15.0),
-  //         ),
-  //         // TODO : tambah timer selama call, lalu ditampilkan di chat screen berapa lama call after call finish
-  //         RawMaterialButton(
-  //           onPressed: _onSwitchCamera,
-  //           child: Icon(
-  //             Icons.switch_camera,
-  //             color: Colors.blueAccent,
-  //             size: 20.0,
-  //           ),
-  //           shape: CircleBorder(),
-  //           elevation: 2.0,
-  //           fillColor: Colors.white,
-  //           padding: const EdgeInsets.all(12.0),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _toolbar() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RawMaterialButton(
+            onPressed: _onToggleMute,
+            child: Icon(
+              muted ? Icons.mic : Icons.mic_off,
+              color: muted ? Colors.white : Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: muted ? Colors.blueAccent : Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: () async {
+              User receiver =
+                  await UserServices.getUser(widget.call.receiverId);
+              User sender = await UserServices.getUser(widget.call.callerId);
+              elapsed = showTimeCallDuration();
+              saveCall(receiver, sender);
+              CallServices.endCall(call: widget.call);
+              // Navigator.pop(this.context);
+            },
+            child: Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 35.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(15.0),
+          ),
+          RawMaterialButton(
+            onPressed: _onSwitchCamera,
+            child: Icon(
+              Icons.switch_camera,
+              color: Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -300,143 +343,89 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
-      builder: (context, userState) {
-        if (userState is UserLoaded) {
-          callStreamSubscription =
-              CallServices.callStream(id: userState.user.id)
-                  .listen((DocumentSnapshot ds) {
-            switch (ds.data) {
-              case null:
-                // snapshot is null which means no data, call is hanged and document in call is deleted
-                context.bloc<PageBloc>().add(GoToMainPage());
-                break;
-              default:
-                break;
-            }
-          });
-
-          return Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(
-              child: Stack(
-                children: <Widget>[
-                  _viewRows(),
-                  // _panel(),
-                  // _toolbar(),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: const EdgeInsets.symmetric(vertical: 48),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        RawMaterialButton(
-                          onPressed: _onToggleMute,
-                          child: Icon(
-                            muted ? Icons.mic : Icons.mic_off,
-                            color: muted ? Colors.white : Colors.blueAccent,
-                            size: 20.0,
-                          ),
-                          shape: CircleBorder(),
-                          elevation: 2.0,
-                          fillColor: muted ? Colors.blueAccent : Colors.white,
-                          padding: const EdgeInsets.all(12.0),
-                        ),
-                        RawMaterialButton(
-                          onPressed: () async {
-                            // TODO : review app and simpan data pasien (show dialog) oleh dokter
-                            if (widget.call.callerStatus == "Patient" &&
-                                widget.call.receiverStatus == "Doctor") {
-                              showDialog<String>(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return RatingDialog(
-                                      icon: Image(
-                                        image: NetworkImage(
-                                            "${widget.call.receiverPhoto}"),
-                                        height: 100,
-                                      ), // set your own image/icon widget
-                                      title: "Doctor Rating Consultation",
-                                      description:
-                                          "How was the consultation with dr. ${widget.call.receiverName}",
-                                      submitButton: "SUBMIT",
-                                      // alternativeButton:
-                                      //     "Contact us instead?", // optional
-                                      positiveComment:
-                                          "We are so happy to hear :)", // optional
-                                      negativeComment:
-                                          "We're sad to hear :(", // optional
-                                      accentColor: Colors.red, // optional
-                                      onSubmitPressed: (int rating) async {
-                                        print(
-                                            "onSubmitPressed: rating = $rating");
-                                        await UserServices.setDoctorRating(
-                                            widget.call.receiverId,
-                                            rating.toDouble());
-                                      },
-                                    );
-                                  });
-
-                              CallServices.endCall(
-                                call: widget.call,
-                              );
-
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToMainPage(bottomNavBarIndex: 1));
-                            } else if (widget.call.callerStatus == "Doctor" &&
-                                widget.call.receiverStatus == "Patient") {
-                              CallServices.endCall(
-                                call: widget.call,
-                              );
-
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToHistoryPatientPage(widget.call));
-                            } else {
-                              CallServices.endCall(
-                                call: widget.call,
-                              );
-
-                              context
-                                  .bloc<PageBloc>()
-                                  .add(GoToMainPage(bottomNavBarIndex: 1));
-                            }
-                          },
-                          child: Icon(
-                            Icons.call_end,
-                            color: Colors.white,
-                            size: 35.0,
-                          ),
-                          shape: CircleBorder(),
-                          elevation: 2.0,
-                          fillColor: Colors.redAccent,
-                          padding: const EdgeInsets.all(15.0),
-                        ),
-                        RawMaterialButton(
-                          onPressed: _onSwitchCamera,
-                          child: Icon(
-                            Icons.switch_camera,
-                            color: Colors.blueAccent,
-                            size: 20.0,
-                          ),
-                          shape: CircleBorder(),
-                          elevation: 2.0,
-                          fillColor: Colors.white,
-                          padding: const EdgeInsets.all(12.0),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        } else {
-          return SpinKitFadingCircle();
-        }
-      },
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Stack(
+            children: <Widget>[
+              _viewRows(),
+              // _panel(),
+              _toolbar(),
+              // Container(
+              //   alignment: Alignment.bottomCenter,
+              //   padding: const EdgeInsets.symmetric(vertical: 48),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       RawMaterialButton(
+              //         onPressed: _onToggleMute,
+              //         child: Icon(
+              //           muted ? Icons.mic : Icons.mic_off,
+              //           color: muted ? Colors.white : Colors.blueAccent,
+              //           size: 20.0,
+              //         ),
+              //         shape: CircleBorder(),
+              //         elevation: 2.0,
+              //         fillColor: muted ? Colors.blueAccent : Colors.white,
+              //         padding: const EdgeInsets.all(12.0),
+              //       ),
+              //       RawMaterialButton(
+              //         onPressed: () async {
+              //           User receiver =
+              //               await UserServices.getUser(widget.call.receiverId);
+              //           User sender =
+              //               await UserServices.getUser(widget.call.callerId);
+              //           elapsed = showTimeCallDuration();
+              //           saveCall(receiver, sender);
+              //           CallServices.endCall(call: widget.call);
+              //           // Navigator.pop(context);
+              //         },
+              //         child: Icon(
+              //           Icons.call_end,
+              //           color: Colors.white,
+              //           size: 35.0,
+              //         ),
+              //         shape: CircleBorder(),
+              //         elevation: 2.0,
+              //         fillColor: Colors.redAccent,
+              //         padding: const EdgeInsets.all(15.0),
+              //       ),
+              //       RawMaterialButton(
+              //         onPressed: _onSwitchCamera,
+              //         child: Icon(
+              //           Icons.switch_camera,
+              //           color: Colors.blueAccent,
+              //           size: 20.0,
+              //         ),
+              //         shape: CircleBorder(),
+              //         elevation: 2.0,
+              //         fillColor: Colors.white,
+              //         padding: const EdgeInsets.all(12.0),
+              //       )
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  void saveCall(User receiver, User sender) {
+    var text = (sender.status == "Doctor")
+        ? "call by dr.${widget.call.callerName}"
+        : "call by ${widget.call.callerName}";
+    Message _message = Message(
+        receiverId: widget.call.receiverId,
+        senderId: widget.call.callerId,
+        receiverName: widget.call.receiverName,
+        senderName: widget.call.callerName,
+        timeStamp: Timestamp.now(),
+        message: text,
+        callDuration: elapsed,
+        type: "call");
+    MessageServices.addMessageToDb(_message, sender, receiver);
   }
 }

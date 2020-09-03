@@ -27,7 +27,7 @@ dependencies:
   firebase_core: ^0.4.5
   cloud_firestore: ^0.13.7
   equatable: ^1.2.0
-  provider: ^4.3.1
+  provider: ^4.0.3
   email_validator: ^1.0.4
   flushbar: ^1.10.4
   flutter_spinkit: ^4.1.2+1
@@ -53,7 +53,6 @@ dependencies:
   lottie: ^0.5.1
   rating_dialog: ^1.0.0
   rating_bar: ^0.2.0
-  flutter_conditional_rendering: ^1.1.1
 
 dev_dependencies:
   flutter_test:
