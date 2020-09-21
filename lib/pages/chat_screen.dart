@@ -10,6 +10,8 @@ class ChatScreenPage extends StatefulWidget {
 }
 
 class _ChatScreenPageState extends State<ChatScreenPage> {
+  bool isConsultationDone = false;
+
   ImageUploadProvider _imageUploadProvider;
   @override
   Widget build(BuildContext context) {
@@ -19,45 +21,92 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
         .add(ChangeTheme(ThemeData().copyWith(primaryColor: mainColor)));
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
     return WillPopScope(onWillPop: () async {
-      if (widget.sender.status == "Patient") {
-        showDialog<String>(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return RatingDialog(
-                icon: Image(
-                  image: NetworkImage("${widget.receiver.profileImage}"),
-                  height: 100,
-                ), // set your own image/icon widget
-                title: "Doctor Rating Consultation",
-                description:
-                    "How was the consultation with dr. ${widget.receiver.fullName}",
-                submitButton: "SUBMIT",
-                // alternativeButton:
-                //     "Contact us instead?", // optional
-                positiveComment: "We are so happy to hear :)", // optional
-                negativeComment: "We're sad to hear :(", // optional
-                accentColor: Colors.red, // optional
-                onSubmitPressed: (int rating) async {
-                  print("onSubmitPressed: rating = $rating");
-                  await UserServices.setDoctorRating(
-                      widget.receiver.id, rating.toDouble());
-                },
-              );
-            });
-        context.bloc<PageBloc>().add(GoToMainPage(bottomNavBarIndex: 0));
-      } else {
-        Call call = Call(
-          callerId: widget.sender.id,
-          callerName: widget.sender.fullName,
-          callerStatus: widget.sender.status,
-          receiverId: widget.receiver.id,
-          receiverName: widget.receiver.fullName,
-          receiverStatus: widget.receiver.status,
-        );
-
-        context.bloc<PageBloc>().add(GoToHistoryPatientPage(call));
-      }
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Konfirmasi selesai konsultasi",
+              style: blackTextFont,
+            ),
+            content: Text(
+              "Apakah anda sudah selesai melakukan konsultasi ?",
+              style: greyTextFont,
+            ),
+            actions: [
+              RaisedButton(
+                  color: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      isConsultationDone = true;
+                      Navigator.pop(context);
+                      if (widget.sender.status == "Patient") {
+                        showDialog<String>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return RatingDialog(
+                                icon: Image(
+                                  image: NetworkImage(
+                                      "${widget.receiver.profileImage}"),
+                                  height: 100,
+                                ), // set your own image/icon widget
+                                title: "Doctor Rating Consultation",
+                                description:
+                                    "How was the consultation with dr. ${widget.receiver.fullName}",
+                                submitButton: "SUBMIT",
+                                // alternativeButton:
+                                //     "Contact us instead?", // optional
+                                positiveComment:
+                                    "We are so happy to hear :)", // optional
+                                negativeComment:
+                                    "We're sad to hear :(", // optional
+                                accentColor: Colors.red, // optional
+                                onSubmitPressed: (int rating) async {
+                                  print("onSubmitPressed: rating = $rating");
+                                  await UserServices.setDoctorRating(
+                                      widget.receiver.id, rating.toDouble());
+                                },
+                              );
+                            });
+                        context
+                            .bloc<PageBloc>()
+                            .add(GoToMainPage(bottomNavBarIndex: 0));
+                      } else {
+                        Call call = Call(
+                          callerId: widget.sender.id,
+                          callerName: widget.sender.fullName,
+                          callerStatus: widget.sender.status,
+                          receiverId: widget.receiver.id,
+                          receiverName: widget.receiver.fullName,
+                          receiverStatus: widget.receiver.status,
+                        );
+                        context
+                            .bloc<PageBloc>()
+                            .add(GoToHistoryPatientPage(call));
+                      }
+                    });
+                  },
+                  child: Text(
+                    "Yes",
+                    style: blackTextFont,
+                  )),
+              RaisedButton(
+                  color: mainColor,
+                  onPressed: () {
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: Text(
+                    "No",
+                    style: whiteTextFont,
+                  )),
+            ],
+            elevation: 24.0,
+          );
+        },
+      );
 
       return;
     }, child: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
@@ -70,49 +119,95 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  if (widget.sender.status == "Patient") {
-                    showDialog<String>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return RatingDialog(
-                            icon: Image(
-                              image: NetworkImage(
-                                  "${widget.receiver.profileImage}"),
-                              height: 100,
-                            ), // set your own image/icon widget
-                            title: "Doctor Rating Consultation",
-                            description:
-                                "How was the consultation with dr. ${widget.receiver.fullName}",
-                            submitButton: "SUBMIT",
-                            // alternativeButton:
-                            //     "Contact us instead?", // optional
-                            positiveComment:
-                                "We are so happy to hear :)", // optional
-                            negativeComment: "We're sad to hear :(", // optional
-                            accentColor: Colors.red, // optional
-                            onSubmitPressed: (int rating) async {
-                              print("onSubmitPressed: rating = $rating");
-                              await UserServices.setDoctorRating(
-                                  widget.receiver.id, rating.toDouble());
-                            },
-                          );
-                        });
-                    context
-                        .bloc<PageBloc>()
-                        .add(GoToMainPage(bottomNavBarIndex: 0));
-                  } else {
-                    Call call = Call(
-                      callerId: widget.sender.id,
-                      callerName: widget.sender.fullName,
-                      callerStatus: widget.sender.status,
-                      receiverId: widget.receiver.id,
-                      receiverName: widget.receiver.fullName,
-                      receiverStatus: widget.receiver.status,
-                    );
-
-                    context.bloc<PageBloc>().add(GoToHistoryPatientPage(call));
-                  }
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Konfirmasi selesai konsultasi",
+                          style: blackTextFont,
+                        ),
+                        content: Text(
+                          "Apakah anda sudah selesai melakukan konsultasi ?",
+                          style: greyTextFont,
+                        ),
+                        actions: [
+                          RaisedButton(
+                              color: Colors.white,
+                              onPressed: () {
+                                setState(() {
+                                  isConsultationDone = true;
+                                  Navigator.pop(context);
+                                  if (widget.sender.status == "Patient") {
+                                    showDialog<String>(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (context) {
+                                          return RatingDialog(
+                                            icon: Image(
+                                              image: NetworkImage(
+                                                  "${widget.receiver.profileImage}"),
+                                              height: 100,
+                                            ), // set your own image/icon widget
+                                            title: "Doctor Rating Consultation",
+                                            description:
+                                                "How was the consultation with dr. ${widget.receiver.fullName}",
+                                            submitButton: "SUBMIT",
+                                            // alternativeButton:
+                                            //     "Contact us instead?", // optional
+                                            positiveComment:
+                                                "We are so happy to hear :)", // optional
+                                            negativeComment:
+                                                "We're sad to hear :(", // optional
+                                            accentColor: Colors.red, // optional
+                                            onSubmitPressed:
+                                                (int rating) async {
+                                              print(
+                                                  "onSubmitPressed: rating = $rating");
+                                              await UserServices
+                                                  .setDoctorRating(
+                                                      widget.receiver.id,
+                                                      rating.toDouble());
+                                            },
+                                          );
+                                        });
+                                    context.bloc<PageBloc>().add(
+                                        GoToMainPage(bottomNavBarIndex: 0));
+                                  } else {
+                                    Call call = Call(
+                                      callerId: widget.sender.id,
+                                      callerName: widget.sender.fullName,
+                                      callerStatus: widget.sender.status,
+                                      receiverId: widget.receiver.id,
+                                      receiverName: widget.receiver.fullName,
+                                      receiverStatus: widget.receiver.status,
+                                    );
+                                    context
+                                        .bloc<PageBloc>()
+                                        .add(GoToHistoryPatientPage(call));
+                                  }
+                                });
+                              },
+                              child: Text(
+                                "Yes",
+                                style: blackTextFont,
+                              )),
+                          RaisedButton(
+                              color: mainColor,
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Text(
+                                "No",
+                                style: whiteTextFont,
+                              )),
+                        ],
+                        elevation: 24.0,
+                      );
+                    },
+                  );
                 },
               ),
               title: Column(

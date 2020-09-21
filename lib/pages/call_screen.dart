@@ -352,60 +352,6 @@ class _CallScreenState extends State<CallScreen> {
               _viewRows(),
               // _panel(),
               _toolbar(),
-              // Container(
-              //   alignment: Alignment.bottomCenter,
-              //   padding: const EdgeInsets.symmetric(vertical: 48),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: <Widget>[
-              //       RawMaterialButton(
-              //         onPressed: _onToggleMute,
-              //         child: Icon(
-              //           muted ? Icons.mic : Icons.mic_off,
-              //           color: muted ? Colors.white : Colors.blueAccent,
-              //           size: 20.0,
-              //         ),
-              //         shape: CircleBorder(),
-              //         elevation: 2.0,
-              //         fillColor: muted ? Colors.blueAccent : Colors.white,
-              //         padding: const EdgeInsets.all(12.0),
-              //       ),
-              //       RawMaterialButton(
-              //         onPressed: () async {
-              //           User receiver =
-              //               await UserServices.getUser(widget.call.receiverId);
-              //           User sender =
-              //               await UserServices.getUser(widget.call.callerId);
-              //           elapsed = showTimeCallDuration();
-              //           saveCall(receiver, sender);
-              //           CallServices.endCall(call: widget.call);
-              //           // Navigator.pop(context);
-              //         },
-              //         child: Icon(
-              //           Icons.call_end,
-              //           color: Colors.white,
-              //           size: 35.0,
-              //         ),
-              //         shape: CircleBorder(),
-              //         elevation: 2.0,
-              //         fillColor: Colors.redAccent,
-              //         padding: const EdgeInsets.all(15.0),
-              //       ),
-              //       RawMaterialButton(
-              //         onPressed: _onSwitchCamera,
-              //         child: Icon(
-              //           Icons.switch_camera,
-              //           color: Colors.blueAccent,
-              //           size: 20.0,
-              //         ),
-              //         shape: CircleBorder(),
-              //         elevation: 2.0,
-              //         fillColor: Colors.white,
-              //         padding: const EdgeInsets.all(12.0),
-              //       )
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),

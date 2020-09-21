@@ -4,8 +4,8 @@ class CallServices {
   static CollectionReference _callCollection =
       Firestore.instance.collection('call');
 
-  static CollectionReference _callLogCollection =
-      Firestore.instance.collection('callLogs');
+  // static CollectionReference _callLogCollection =
+  //     Firestore.instance.collection('callLogs');
 
   static Future<bool> makeCall({Call call}) async {
     try {

@@ -263,26 +263,23 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
             if (snapshot.data[i].status == doctorStatus &&
                 snapshot.data[i].ratingNum > 3.0) {
               userList.add(snapshot.data[i]);
-              // counter++;
-              // print(counter);
-            }
-            if (userList.isNotEmpty) {
-              return buildListDoctor(doctorStatus);
-            } else {
-              return Container(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "...No doctor found for a moment...",
-                    style: blackTextFont.copyWith(
-                        fontSize: 18, color: accentColor2),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
             }
           }
-          return Container();
+          if (userList.isNotEmpty) {
+            return buildListDoctor(doctorStatus);
+          } else {
+            return Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "...No doctor found for a moment...",
+                  style:
+                      blackTextFont.copyWith(fontSize: 18, color: accentColor2),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
         }
       },
     );

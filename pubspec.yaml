@@ -53,6 +53,7 @@ dependencies:
   lottie: ^0.5.1
   rating_dialog: ^1.0.0
   rating_bar: ^0.2.0
+  onesignal_flutter: ^2.6.1
 
 dev_dependencies:
   flutter_test:
