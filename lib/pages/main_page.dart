@@ -204,9 +204,9 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                                 });
                               },
                               children: [
-                                // DoctorPage(DoctorType()),
                                 ChatListScreen(),
-                                // HospitalPage(),
+                                PatientListMedicalRecordPage(
+                                    user: userState.user),
                                 UserProfilePageMenu(),
                               ],
                             ),
@@ -237,23 +237,35 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                       //     ),
                       //     title: Text("Homepage")),
                       BottomNavyBarItem(
-                          activeColor: mainColor,
-                          inactiveColor: accentColor7,
-                          icon: Icon(
-                            Icons.chat,
-                            // size: 28,
-                            // color: accentColor2,
-                          ),
-                          title: Text("Messages")),
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.chat,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Messages"),
+                      ),
                       BottomNavyBarItem(
-                          activeColor: mainColor,
-                          inactiveColor: accentColor7,
-                          icon: Icon(
-                            Icons.person_pin,
-                            // size: 28,
-                            // color: accentColor2,
-                          ),
-                          title: Text("Profile")),
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.format_list_bulleted,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("My Patient List Medical Record"),
+                      ),
+                      BottomNavyBarItem(
+                        activeColor: mainColor,
+                        inactiveColor: accentColor7,
+                        icon: Icon(
+                          Icons.person_pin,
+                          // size: 28,
+                          // color: accentColor2,
+                        ),
+                        title: Text("Profile"),
+                      ),
                     ],
                   ),
                 ),

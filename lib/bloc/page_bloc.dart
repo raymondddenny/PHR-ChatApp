@@ -49,6 +49,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnHistoryPatientPage(event.call);
     } else if (event is GoToDoctorRatingPage) {
       yield OnDoctorRatingPage(event.call);
+    } else if (event is GoToPatientListMedicalRecordPage) {
+      yield OnPatientListMedicalRecordPage(event.user);
     }
   }
 }

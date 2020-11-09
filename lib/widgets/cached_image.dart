@@ -9,7 +9,7 @@ class CachedImage extends StatelessWidget {
 
   final BoxFit fit;
 
-  final String noImageAvailable = "Images/user_default.jpg";
+  final String noImageAvailable = "images/user_default.png";
 
   CachedImage(
     this.imageUrl, {
@@ -26,7 +26,7 @@ class CachedImage extends StatelessWidget {
         height: isRounded ? radius : height,
         width: isRounded ? radius : width,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(isRounded ? 20 : radius),
+          borderRadius: BorderRadius.circular(isRounded ? 40 : radius),
           child: CachedNetworkImage(
             imageUrl: imageUrl,
             fit: fit,

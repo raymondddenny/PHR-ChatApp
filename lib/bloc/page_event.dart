@@ -116,3 +116,10 @@ class GoToDoctorRatingPage extends PageEvent {
   @override
   List<Object> get props => [call];
 }
+
+class GoToPatientListMedicalRecordPage extends PageEvent {
+  final User user;
+  GoToPatientListMedicalRecordPage(this.user);
+  @override
+  List<Object> get props => [user];
+}

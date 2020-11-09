@@ -31,6 +31,7 @@ class ViewLayout extends StatelessWidget {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, userState) {
         if (userState is UserLoaded) {
+          // TODO : sort new messages up
           return Container(
             padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: CustomChatTile(
@@ -45,7 +46,7 @@ class ViewLayout extends StatelessWidget {
                   children: [
                     CachedImage(
                       contact.profileImage,
-                      radius: 80,
+                      radius: 70,
                       isRounded: true,
                     ),
                     Positioned(

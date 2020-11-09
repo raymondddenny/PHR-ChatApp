@@ -110,7 +110,9 @@ class _ChatListContainerState extends State<ChatListContainer> {
                 mini: false,
                 leading: CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage(doctorType.profileImage),
+                  backgroundImage: (doctorType.profileImage != "no_pic")
+                      ? NetworkImage(doctorType.profileImage)
+                      : AssetImage("images/user_default.png"),
                 ),
                 title: Text(
                   doctorType.fullName,

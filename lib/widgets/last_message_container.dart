@@ -31,12 +31,14 @@ class LastMessageContainer extends StatelessWidget {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          message.message,
-                          maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                          style: greyTextFont.copyWith(fontSize: 12),
+                        Flexible(
+                          child: Text(
+                            message.message,
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            style: greyTextFont.copyWith(fontSize: 12),
+                          ),
                         ),
                         Flexible(
                           child: Text(

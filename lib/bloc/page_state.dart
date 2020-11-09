@@ -124,3 +124,10 @@ class OnDoctorRatingPage extends PageState {
   @override
   List<Object> get props => [call];
 }
+
+class OnPatientListMedicalRecordPage extends PageState {
+  final User user;
+  OnPatientListMedicalRecordPage(this.user);
+  @override
+  List<Object> get props => [user];
+}

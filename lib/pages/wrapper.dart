@@ -80,10 +80,14 @@ class Wrapper extends StatelessWidget {
                                                                           call:
                                                                               state.call,
                                                                         )
-                                                                      : MainPage(
-                                                                          bottomNavBarIndex:
-                                                                              (state as OnMainPage).bottomNavBarindex,
-                                                                        ),
+                                                                      : (state
+                                                                              is OnPatientListMedicalRecordPage)
+                                                                          ? PatientListMedicalRecordPage(
+                                                                              user: state.user,
+                                                                            )
+                                                                          : MainPage(
+                                                                              bottomNavBarIndex: (state as OnMainPage).bottomNavBarindex,
+                                                                            ),
     );
   }
 }

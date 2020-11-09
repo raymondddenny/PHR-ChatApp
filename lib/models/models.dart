@@ -11,3 +11,4 @@ part 'message.dart';
 part 'call.dart';
 part 'contact.dart';
 part 'history_patient.dart';
+part 'patientMedRecord.dart';

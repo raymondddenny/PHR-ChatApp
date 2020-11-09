@@ -62,6 +62,16 @@ class UserServices {
     }
     return userList;
   }
+
+  static Future<List<User>> getAllContact(String doctorId) async {
+    List<User> userList = List<User>();
+    DocumentSnapshot documentSnapshot =
+        await _userCollection.document(doctorId).get();
+    for (var i = 0; i < documentSnapshot.data.length; i++) {
+      userList.add(User.fromMap(documentSnapshot.data[i]));
+    }
+    return userList;
+  }
   // static Future<List<User>> getAllUser() async {
   //   List<User> userList = List<User>();
   //   QuerySnapshot querySnapshot = await _userCollection.getDocuments();

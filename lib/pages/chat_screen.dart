@@ -225,10 +225,23 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
                   padding: const EdgeInsets.only(top: 8, right: 8),
                   child: Container(
                     width: 48,
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        widget.receiver.profileImage,
-                      ),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundImage:
+                              (widget.receiver.profileImage == "no_pic")
+                                  ? AssetImage("images/user_default.png")
+                                  : NetworkImage(
+                                      widget.receiver.profileImage,
+                                    ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 35,
+                          child: OnlineDotIndicator(uid: widget.receiver.id),
+                        ),
+                      ],
                     ),
                   ),
                 ),

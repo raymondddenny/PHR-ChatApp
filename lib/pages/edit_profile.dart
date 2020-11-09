@@ -84,7 +84,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         image: DecorationImage(
                                             image: (profileImageFile != null)
                                                 ? FileImage(profileImageFile)
-                                                : (profilePath != "")
+                                                : (profilePath != "no_pic")
                                                     ? NetworkImage(profilePath)
                                                     : AssetImage(
                                                         "images/user_default.png"),
@@ -93,7 +93,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     alignment: Alignment.bottomCenter,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        if (profilePath == "") {
+                                        if (profilePath == "no_pic") {
                                           profileImageFile = await getImage();
 
                                           if (profileImageFile != null) {
@@ -102,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           }
                                         } else {
                                           profileImageFile = null;
-                                          profilePath = "";
+                                          profilePath = "no_pic";
                                         }
 
                                         setState(() {
@@ -125,7 +125,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
                                                 image: AssetImage((profilePath ==
-                                                        "")
+                                                        "no_pic")
                                                     ? "images/btn_add_photo.png"
                                                     : "images/btn_delete_photo.png"))),
                                       ),
@@ -338,7 +338,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         image: DecorationImage(
                                             image: (profileImageFile != null)
                                                 ? FileImage(profileImageFile)
-                                                : (profilePath != "")
+                                                : (profilePath != "no_pic")
                                                     ? NetworkImage(profilePath)
                                                     : AssetImage(
                                                         "images/user_default.png"),
@@ -347,7 +347,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     alignment: Alignment.bottomCenter,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        if (profilePath == "") {
+                                        if (profilePath == "no_pic") {
                                           profileImageFile = await getImage();
 
                                           if (profileImageFile != null) {
@@ -356,7 +356,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           }
                                         } else {
                                           profileImageFile = null;
-                                          profilePath = "";
+                                          profilePath = "no_pic";
                                         }
 
                                         setState(() {
@@ -379,7 +379,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
                                                 image: AssetImage((profilePath ==
-                                                        "")
+                                                        "no_pic")
                                                     ? "images/btn_add_photo.png"
                                                     : "images/btn_delete_photo.png"))),
                                       ),

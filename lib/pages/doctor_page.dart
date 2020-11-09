@@ -65,12 +65,12 @@ class _DoctorPageState extends State<DoctorPage> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                        image: (userState.user.profileImage ==
-                                                "no_pic"
-                                            ? AssetImage(
-                                                "images/user_default.png")
-                                            : NetworkImage(
-                                                userState.user.profileImage)),
+                                        image: (userState.user.profileImage !=
+                                                "no_pic")
+                                            ? NetworkImage(
+                                                userState.user.profileImage)
+                                            : AssetImage(
+                                                "images/user_default.png"),
                                         fit: BoxFit.cover),
                                   ),
                                 ),
@@ -297,7 +297,7 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
           }).toList();
 
     return Container(
-      height: 100,
+      height: 250,
       child: Column(
         children: [
           Expanded(
@@ -322,7 +322,11 @@ class _TopRateDoctorListTileState extends State<TopRateDoctorListTile> {
                     mini: false,
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(doctor.profileImage),
+                      backgroundImage: (doctor.profileImage != "no_pic")
+                          ? (doctor.profileImage.isEmpty)
+                              ? CircularProgressIndicator()
+                              : NetworkImage(doctor.profileImage)
+                          : AssetImage("images/user_default.png"),
                     ),
                     title: Text(
                       doctor.fullName,

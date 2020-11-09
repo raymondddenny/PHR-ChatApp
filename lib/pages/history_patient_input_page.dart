@@ -201,6 +201,9 @@ class _HistoryPatientPageState extends State<HistoryPatientPage> {
                               historyPatient: historyPatient,
                             );
 
+                            HistoryPatientServices.addHistoryPatientDoctorToDb(
+                                historyPatient: historyPatient);
+
                             // if (receiver != null && sender != null) {
                             //   context.bloc<PageBloc>().add(GoToChatScreenPage(
                             //       receiver: receiver, sender: sender));
@@ -378,6 +381,8 @@ class _HistoryPatientPageState extends State<HistoryPatientPage> {
                             HistoryPatientServices.addHistoryToDb(
                               historyPatient: historyPatient,
                             );
+                            HistoryPatientServices.addHistoryPatientDoctorToDb(
+                                historyPatient: historyPatient);
 
                             // if (receiver != null && sender != null) {
                             //   context.bloc<PageBloc>().add(GoToChatScreenPage(
