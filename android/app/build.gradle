@@ -63,11 +63,12 @@ android {
 
     buildTypes {
         release {
-            shrinkResources true
+            // TODO: disable proguardi in debug mode
+            // shrinkResources true
 
-            proguardFiles getDefaultProguardFile(
-                    'proguard-android-optimize.txt'),
-                    'proguard-rules.pro'
+            // proguardFiles getDefaultProguardFile(
+            //         'proguard-android-optimize.txt'),
+            //         'proguard-rules.pro'
 
 
             signingConfig signingConfigs.debug
